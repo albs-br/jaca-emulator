@@ -1,5 +1,5 @@
 <div id="app">
-  
+
   <label for="instruction">Instruction</label>
   <select id="instruction">
     <option>NO OP</option>
@@ -21,3 +21,18 @@
   <label for="data">Data</label>
   <input type="text" id="data" />
 </div>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBu8wb_ha1B7I5eLCTq01Rn-2hkuGQ0tcE",
+    authDomain: "jaca-emulator.firebaseapp.com",
+    databaseURL: "https://jaca-emulator.firebaseio.com",
+    projectId: "jaca-emulator",
+    storageBucket: "jaca-emulator.appspot.com",
+    messagingSenderId: "267884088566"
+  };
+  firebase.initializeApp(config);
+</script>
