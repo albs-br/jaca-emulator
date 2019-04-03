@@ -2,4 +2,4 @@
 
 Emulator for JACA-2 Homebrew Computer
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/js-zmignv)
+[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/jaca-emulator)
