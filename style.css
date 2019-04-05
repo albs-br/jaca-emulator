@@ -6,11 +6,15 @@ h1, h2 {
   width: 50px;
 }
 
-#memory {
+#memory, #assembly {
   width: 100%;
   height: 300px;
 }
 
-#pc {
+.byteField {
   width: 50px;
+}
+
+.addressField {
+  width: 100px;
 }
