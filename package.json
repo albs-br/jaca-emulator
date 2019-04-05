@@ -1,8 +1,9 @@
 {
   "name": "js-zmignv",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "dependencies": {
+    "fontawesome": "^5.6.3",
     "jquery": "^3.3.1",
     "w3css": "^2.7.0"
   }

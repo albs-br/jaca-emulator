@@ -5,3 +5,12 @@ h1, h2 {
 #data {
   width: 50px;
 }
+
+#memory {
+  width: 100%;
+  height: 300px;
+}
+
+#pc {
+  width: 50px;
+}
