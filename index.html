@@ -46,38 +46,70 @@
 </div-->
 
 <div class="w3-container">
-  <h2>JACA-2 Emulator</h2>
+  <h2>JACA-2 Emulator <span id="version" class="w3-medium">v.0.0.0</span></h2>
 </div>
 
 <div class="w3-row-padding">
 
-  <div class="w3-third w3-margin-bottom">
+  <div class="w3-col l3 w3-margin-bottom">
     <ul class="w3-ul w3-border w3-center w3-hover-shadow">
       <li class="w3-black w3-large w3-padding-16">Assembly</li>
       <li class="w3-padding-16">
-        <label for="instruction">Instruction</label>
-        <select id="instruction">
-          <option>NO OP</option>
-          <option data-instruction-format="imediate">LD R1, data</option>
-        </select>
-        
-        <label for="r1">R1</label>
-        <select id="r1">
-          <option>A</option>
-          <option>B</option>
-          <option>H</option>
-          <option>L</option>
-          <option>C</option>
-          <option>D</option>
-          <option>E</option>
-          <option>F</option>
-        </select>
-
-        <label for="data">Data</label>
-        <input type="text" id="data" />        
+        <textarea id="assembly"></textarea>
       </li>
-      <li class="w3-padding-16"><b>10</b> Emails</li>
-      <li class="w3-padding-16"><b>10</b> Domains</li>
+      <li class="w3-light-grey w3-padding-24">
+
+        <div class="w3-row">
+
+          <div class="w3-col s4 w3-left-align">
+            <label for="instruction">Instruction</label>
+
+          </div>
+
+          <div class="w3-col s2 w3-left-align">
+            <label for="r1">R1</label>
+          </div>
+
+          <div class="w3-col s2 w3-left-align">
+            <label for="data">Data</label>
+          </div>
+
+        </div>
+
+        <div class="w3-row">
+
+          <div class="w3-col s4 w3-left-align">
+            <select id="instruction">
+              <option>NO OP</option>
+              <option data-instruction-format="imediate">LD R1, data</option>
+            </select>
+          </div>
+
+          <div class="w3-col s2 w3-left-align">
+            <select id="r1">
+              <option>A</option>
+              <option>B</option>
+              <option>H</option>
+              <option>L</option>
+              <option>C</option>
+              <option>D</option>
+              <option>E</option>
+              <option>F</option>
+            </select>
+          </div>
+
+          <div class="w3-col s3 w3-left-align">
+            <input type="text" id="data" />        
+          </div>
+
+          <div class="w3-col s2 w3-right-align">
+            <button class="w3-button w3-green">+</button>
+          </div>
+          
+        </div>
+
+      </li>
+      <!--li class="w3-padding-16"><b>10</b> Domains</li>
       <li class="w3-padding-16"><b>Endless</b> Support</li>
       <li class="w3-padding-16">
         <h2 class="w3-wide">$ 10</h2>
@@ -85,11 +117,11 @@
       </li>
       <li class="w3-light-grey w3-padding-24">
         <button class="w3-button w3-green w3-padding-large">Sign Up</button>
-      </li>
+      </li-->
     </ul>
   </div>
 
-  <div class="w3-third w3-margin-bottom">
+  <div class="w3-col l2 w3-margin-bottom">
     
     <ul class="w3-ul w3-border w3-center w3-hover-shadow">
       <li class="w3-black w3-large w3-padding-16">Memory</li>
@@ -104,22 +136,47 @@
         <span class="w3-opacity">per month</span>
       </li-->
       <li class="w3-light-grey w3-padding-24">
-        <button class="w3-button w3-green w3-padding-large">Sign Up</button>
+        <button class="w3-button w3-green w3-padding-large">
+          <i class="fas fa-trash"></i> Clear
+        </button>
       </li>
     </ul>
   </div>
 
-  <div class="w3-third w3-margin-bottom">
+  <div class="w3-col l7 w3-margin-bottom">
     <ul class="w3-ul w3-border w3-center w3-hover-shadow">
+      
       <li class="w3-green w3-large w3-padding-16">CPU</li>
-      <li class="w3-padding-16"><b>PC</b> <input type="text" id="pc"/></li>
-      <li class="w3-padding-16"><b>50</b> Emails</li>
+      
+      <li class="w3-padding-16">
+        Fetch-1
+        Fetch-2
+        Fetch-3
+        Execute
+      </li>
+      <li class="w3-padding-16">
+        <b>PC</b> <input type="text" id="pc" class="byteField" />
+        <b>IR</b>
+        <input type="text" id="ir1" class="byteField" />
+        <input type="text" id="ir2" class="byteField" />
+        <input type="text" id="ir3" class="byteField" />
+      </li>
+      <li class="w3-padding-16"><b>Registers</b> <input type="text" id="regA" class="byteField" /></li>
+      <li class="w3-padding-16"><b>RET</b> <input type="text" id="ret" class="addressField" /></li>
+      <li class="w3-padding-16">
+        <b>ALU</b> 
+        <input type="text" id="aluA" class="byteField" />
+        <input type="text" id="aluB" class="byteField" />
+        <input type="text" id="aluFunction" class="byteField" />
+        <input type="text" id="aluOut" class="byteField" />
+      </li>
+      <!--li class="w3-padding-16"><b>50</b> Emails</li>
       <li class="w3-padding-16"><b>50</b> Domains</li>
       <li class="w3-padding-16"><b>Endless</b> Support</li>
       <li class="w3-padding-16">
         <h2 class="w3-wide">$ 50</h2>
         <span class="w3-opacity">per month</span>
-      </li>
+      </li-->
       <li class="w3-light-grey w3-padding-24">
         <button class="w3-button w3-green w3-padding-large">
           <i class="fas fa-play"></i> Play
