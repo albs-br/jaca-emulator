@@ -14,6 +14,7 @@ const appDiv = document.getElementById('app');
 import * as pJson from "./package.json";
 
 $('#version').text('v.' + pJson.version);
+$('title').text('JACA-2 Emulator v.' + pJson.version);
 
 let memoryTest = '04 00 01\n04 00 FF'
 $('#memory').text(memoryTest);
@@ -22,11 +23,11 @@ $('#memory').text(memoryTest);
 // 1 - Fetch-2
 // 2 - Fetch-3
 // 3 - Execute
-let cpuState = 0; 
-let pc = 0;
-let ir1 = 0;
-let ir2 = 0;
-let ir3 = 0;
+let cpuState; 
+let pc;
+let ir1;
+let ir2;
+let ir3;
 
 function Reset() {
   cpuState = 0;
@@ -34,6 +35,8 @@ function Reset() {
   ir1 = 0;
   ir2 = 0;
   ir3 = 0;
+  
+  UpdateScreen();
 }
 
 function UpdateScreen() {
@@ -49,15 +52,17 @@ function UpdateScreen() {
 
 $(function () {
   Reset();
-  UpdateScreen();
 
   $('#step').click(function () {
-    let memory = $('#memory').text();
+    let memory = $('#memory').val().trim();
     let arrMem = memory.replace(/\n/g, ' ').split(' ');
 
-    //console.info(arrMem[0]);
+    console.info(arrMem.length);
+    console.info('|' + arrMem[0] + '|');
 
-    if(pc >= arrMem.length) {
+    // When string is empty, the .split method returns an 
+    // array with one empty string, instead of an empty array
+    if(pc >= arrMem.length || arrMem.length == 1) {
       console.info('No memory for read at position ' + pc);
       return;
     }
@@ -86,5 +91,13 @@ $(function () {
 
 
     UpdateScreen();
+  });
+
+  $('#reset').click(function () {
+    Reset();
+  });
+
+  $('#clearMemory').click(function () {
+    $('#memory').val('');
   });
 });
