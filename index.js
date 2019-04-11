@@ -34,7 +34,7 @@ let ir2;
 let ir3;
 let registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 
-function Reset() {
+function reset() {
   cpuState = 0;
   pc = 0;
   ir1 = 0;
@@ -44,10 +44,10 @@ function Reset() {
     registers[index] = 0;
   });
 
-  UpdateScreen();
+  updateScreen();
 }
 
-function UpdateScreen() {
+function updateScreen() {
   
   $('.cpuState span').removeClass('w3-yellow');
   $('.cpuState span:nth-child(' + (cpuState + 1) + ')').addClass('w3-yellow');
@@ -68,78 +68,116 @@ function hex2bin(hex){
     return (parseInt(hex, 16).toString(2)).padStart(8, '0');
 }
 
+function step() {
+
+  let startTime = new Date();
+
+  let memory = $('#memory').val().trim();
+  let arrMem = memory.replace(/\n/g, ' ').split(' ');
+
+  //console.info(arrMem.length);
+  //console.info('|' + arrMem[0] + '|');
+
+  let byteFromMemory = arrMem[pc];
+
+  switch(cpuState) {
+    case 0:
+      ir1 = byteFromMemory;
+      break;
+    case 1:
+      ir2 = byteFromMemory;
+      break;
+    case 2:
+      ir3 = byteFromMemory;
+      break;
+    case 3:
+      // Execute
+      let instruction = hex2bin(ir1) + hex2bin(ir2) + hex2bin(ir3);
+      console.info('instruction: ' + instruction);
+
+      let opcode = parseInt(instruction.substring(0, 6), 2);
+      let r1addr = parseInt(instruction.substring(6, 9), 2);
+      let r2addr = parseInt(instruction.substring(9, 12), 2);
+      let dataValue = parseInt(instruction.substring(16, 24), 2);
+      console.info('opcode: ' + opcode);
+      console.info('r1addr: ' + r1addr);
+      console.info('r2addr: ' + r2addr);
+      console.info('dataValue: ' + dataValue);
+
+      switch(opcode) {
+        case 0:
+          break;
+        case 1:
+          registers[r1addr] = dataValue;
+          break;
+        case 2:
+          registers[r1addr] = registers[r2addr];
+          break;
+      }
+
+      // registers.forEach(function (element, index, array) {
+      //   console.info('register ' + index + ': ' + registers[index]);
+      // });
+
+      break;
+  }
+
+  // When string is empty, the .split method returns an 
+  // array with one empty string, instead of an empty array
+  if(pc >= arrMem.length || arrMem.length == 1) {
+    //console.info('No memory for read at position ' + pc);
+    //return;
+    pc = 0;
+  }
+  else {
+    if(cpuState != 3) pc++;
+  }
+
+  cpuState++;
+  if(cpuState == 4) cpuState = 0;
+
+  updateScreen();
+
+  let endTime = new Date();
+  let timeDiff = endTime - startTime; //in ms
+  $('#timeElapsed').val(timeDiff);
+}
+
 $(function () {
-  Reset();
+  reset();
+
+  let timer;
+  let isRunning = false;
+
+  $('#play').click(function () {
+
+    if(isRunning) return;
+
+    $(this).removeClass('w3-green');
+    $(this).addClass('w3-red');
+
+    isRunning = true;
+    timer = window.setInterval(step, 5);
+    // do {
+    //   step();
+    // }
+    // while (isRunning);
+  });
+
+  $('#pause').click(function () {
+    $('#play').removeClass('w3-red');
+    $('#play').addClass('w3-green');
+
+    isRunning = false;
+    window.clearInterval(timer);
+  });
 
   $('#step').click(function () {
-    let memory = $('#memory').val().trim();
-    let arrMem = memory.replace(/\n/g, ' ').split(' ');
-
-    //console.info(arrMem.length);
-    //console.info('|' + arrMem[0] + '|');
-
-    let byteFromMemory = arrMem[pc];
-
-    switch(cpuState) {
-      case 0:
-        ir1 = byteFromMemory;
-        break;
-      case 1:
-        ir2 = byteFromMemory;
-        break;
-      case 2:
-        ir3 = byteFromMemory;
-        break;
-      case 3:
-        // Execute
-        let instruction = hex2bin(ir1) + hex2bin(ir2) + hex2bin(ir3);
-        console.info('instruction: ' + instruction);
-
-        let opcode = parseInt(instruction.substring(0, 6), 2);
-        let r1addr = parseInt(instruction.substring(6, 9), 2);
-        let r2addr = parseInt(instruction.substring(9, 12), 2);
-        let dataValue = parseInt(instruction.substring(16, 24), 2);
-        console.info('opcode: ' + opcode);
-        console.info('r1addr: ' + r1addr);
-        console.info('r2addr: ' + r2addr);
-        console.info('dataValue: ' + dataValue);
-
-        switch(opcode) {
-          case 0:
-            break;
-          case 1:
-            registers[r1addr] = dataValue;
-            break;
-          case 2:
-            registers[r1addr] = registers[r2addr];
-            break;
-        }
-
-        // registers.forEach(function (element, index, array) {
-        //   console.info('register ' + index + ': ' + registers[index]);
-        // });
-
-        break;
-    }
-
-    UpdateScreen();
-
-    // When string is empty, the .split method returns an 
-    // array with one empty string, instead of an empty array
-    if(pc >= arrMem.length || arrMem.length == 1) {
-      console.info('No memory for read at position ' + pc);
-      return;
-    }
-
-    if(cpuState != 3) pc++;
-
-    cpuState++;
-    if(cpuState == 4) cpuState = 0;
-
+    step();
   });
 
   $('#reset').click(function () {
-    Reset();
+    reset();
   });
 
   $('#clearMemory').click(function () {

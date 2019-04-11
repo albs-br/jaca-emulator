@@ -3,52 +3,6 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-
-
-          <!--div id="app">
-
-  <div class="w3-row-padding">
-    
-    <div class="w3-third">
-
-      <div class="w3-panel w3-card-4 w3-margin w3-lightgray">
-        <p>w3-card</p>
-        
-        <label for="instruction">Instruction</label>
-        <select id="instruction">
-          <option>NO OP</option>
-          <option data-instruction-format="imediate">LD R1, data</option>
-        </select>
-        
-        <label for="r1">R1</label>
-        <select id="r1">
-          <option>A</option>
-          <option>B</option>
-          <option>H</option>
-          <option>L</option>
-          <option>C</option>
-          <option>D</option>
-          <option>E</option>
-          <option>F</option>
-        </select>
-
-        <label for="data">Data</label>
-        <input type="text" id="data" />
-      </div>
-      
-      <div class="w3-third">
-        <div class="w3-panel w3-card-4 w3-margin w3-yellow"><p>w3-card-2</p> w3-card-2 w3-card-2 w3-card-2 w3-card-2 w3-card-2 </div>
-      </div>
-
-      <div class="w3-third">
-        <div class="w3-panel w3-card-4 w3-margin w3-yellow"><p>w3-card-3</p></div>
-      </div>
-    </div>
-  
-  </div>
-
-</div-->
-
 <div class="w3-container">
   <h2>JACA-2 Emulator <span id="version" class="w3-medium">v.0.0.0</span></h2>
 </div>
@@ -217,7 +171,12 @@
         </div>
 
       </li>
-      <li class="w3-padding-16"><b>RET</b> <input type="text" id="ret" class="addressField" /></li>
+
+      <li class="w3-padding-16">
+        <b>RET</b> <input type="text" id="ret" class="addressField" />
+        <b>Time last step</b> <input type="text" id="timeElapsed" class="addressField" /> ms
+      </li>
+
       <li class="w3-padding-16">
         <b>ALU</b> 
         <input type="text" id="aluA" class="byteField" />
@@ -225,18 +184,12 @@
         <input type="text" id="aluFunction" class="byteField" />
         <input type="text" id="aluOut" class="byteField" />
       </li>
-      <!--li class="w3-padding-16"><b>50</b> Emails</li>
-      <li class="w3-padding-16"><b>50</b> Domains</li>
-      <li class="w3-padding-16"><b>Endless</b> Support</li>
-      <li class="w3-padding-16">
-        <h2 class="w3-wide">$ 50</h2>
-        <span class="w3-opacity">per month</span>
-      </li-->
+
       <li class="w3-light-grey w3-padding-24">
-        <button class="w3-button w3-green w3-padding-large">
+        <button id="play" class="w3-button w3-green w3-padding-large">
           <i class="fas fa-play"></i> Play
         </button>
-        <button class="w3-button w3-green w3-padding-large">
+        <button id="pause" class="w3-button w3-green w3-padding-large">
           <i class="fas fa-pause"></i> Pause
         </button>
         <button id="step" class="w3-button w3-green w3-padding-large">
