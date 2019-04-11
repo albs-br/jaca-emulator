@@ -56,6 +56,11 @@ function UpdateScreen() {
   $('#ir1').val(ir1);
   $('#ir2').val(ir2);
   $('#ir3').val(ir3);
+
+  
+  registers.forEach(function (element, index, array) {
+    $('#registers input:nth-child(' + (index + 1) + ')').val(registers[index]);
+  });
 }
 
 function hex2bin(hex){
