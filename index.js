@@ -59,7 +59,8 @@ function UpdateScreen() {
 
   
   registers.forEach(function (element, index, array) {
-    $('#registers input:nth-child(' + (index + 1) + ')').val(registers[index]);
+    console.info('register ' + index + ': ' + registers[index]);
+    $('#registers div:nth-child(' + (index + 2) + ') input').val(registers[index]);
   });
 }
 
@@ -114,14 +115,14 @@ $(function () {
             break;
         }
 
-        registers.forEach(function (element, index, array) {
-          console.info('register ' + index + ': ' + registers[index]);
-        });
+        // registers.forEach(function (element, index, array) {
+        //   console.info('register ' + index + ': ' + registers[index]);
+        // });
 
         break;
     }
 
-
+    UpdateScreen();
 
     // When string is empty, the .split method returns an 
     // array with one empty string, instead of an empty array
@@ -135,8 +136,6 @@ $(function () {
     cpuState++;
     if(cpuState == 4) cpuState = 0;
 
-
-    UpdateScreen();
   });
 
   $('#reset').click(function () {
