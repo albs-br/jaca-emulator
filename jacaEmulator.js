@@ -1,4 +1,4 @@
-class JacaEmulator {
+export class JacaEmulator {
     constructor () {
       // 0 - Fetch-1
       // 1 - Fetch-2
@@ -15,7 +15,7 @@ class JacaEmulator {
     }
     
     execute () {
-      let instruction = hex2bin(ir1) + hex2bin(ir2) + hex2bin(ir3);
+      let instruction = hex2bin(this.ir1) + hex2bin(this.ir2) + hex2bin(this.ir3);
       console.info('instruction: ' + instruction);
 
       let opcode = parseInt(instruction.substring(0, 6), 2);
@@ -31,15 +31,17 @@ class JacaEmulator {
         case 0:
           break;
         case 1:
-          registers[r1addr] = dataValue;
+          this.registers[r1addr] = dataValue;
           break;
         case 2:
-          registers[r1addr] = registers[r2addr];
+          this.registers[r1addr] = this.registers[r2addr];
           break;
       }
     }
 
     reset () {
+      // console.info('reset()');
+
       this.cpuState = 0;
 
       this.pc = 0;
@@ -47,9 +49,13 @@ class JacaEmulator {
       this.ir2 = 0;
       this.ir3 = 0;
 
-      this.registers.forEach(function (element, index, array) {
-        this.registers[index] = 0;
-      });
+      // this.registers.forEach(function (element, index, array) {
+      //   this.registers[index] = 0; // Not working. Don't know why
+      // });
+
+      for(let i=0; i<registers.length; i++) {
+        this.registers[i] = 0
+      }
     }
 }
 

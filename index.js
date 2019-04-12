@@ -1,3 +1,5 @@
+"use strict";
+
 // Import stylesheets
 import './style.css';
 //import 'w3css';
@@ -13,6 +15,8 @@ import $ from 'jquery';
 
 import * as pJson from "./package.json";
 
+import * as J from './jacaEmulator.js';
+
 $('#version').text('v.' + pJson.version);
 $('title').text('JACA-2 Emulator v.' + pJson.version);
 
@@ -27,22 +31,25 @@ $('#memory').text(memoryTest);
 // 1 - Fetch-2
 // 2 - Fetch-3
 // 3 - Execute
-let cpuState; 
-let pc;
-let ir1;
-let ir2;
-let ir3;
-let registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+// let cpuState; 
+// let pc;
+// let ir1;
+// let ir2;
+// let ir3;
+// let registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+let emulator = new J.JacaEmulator();
 
 function reset() {
-  cpuState = 0;
-  pc = 0;
-  ir1 = 0;
-  ir2 = 0;
-  ir3 = 0;
-  registers.forEach(function (element, index, array) {
-    registers[index] = 0;
-  });
+  // cpuState = 0;
+  // pc = 0;
+  // ir1 = 0;
+  // ir2 = 0;
+  // ir3 = 0;
+  // registers.forEach(function (element, index, array) {
+  //   registers[index] = 0;
+  // });
+
+  emulator.reset();
 
   updateScreen();
 }
@@ -50,23 +57,23 @@ function reset() {
 function updateScreen() {
   
   $('.cpuState span').removeClass('w3-yellow');
-  $('.cpuState span:nth-child(' + (cpuState + 1) + ')').addClass('w3-yellow');
+  $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-yellow');
   
-  $('#pc').val(pc);
-  $('#ir1').val(ir1);
-  $('#ir2').val(ir2);
-  $('#ir3').val(ir3);
+  $('#pc').val(emulator.pc);
+  $('#ir1').val(emulator.ir1);
+  $('#ir2').val(emulator.ir2);
+  $('#ir3').val(emulator.ir3);
 
   
-  registers.forEach(function (element, index, array) {
-    console.info('register ' + index + ': ' + registers[index]);
-    $('#registers div:nth-child(' + (index + 2) + ') input').val(registers[index]);
+  emulator.registers.forEach(function (element, index, array) {
+    console.info('register ' + index + ': ' + emulator.registers[index]);
+    $('#registers div:nth-child(' + (index + 2) + ') input').val(emulator.registers[index]);
   });
 }
 
-function hex2bin(hex){
-    return (parseInt(hex, 16).toString(2)).padStart(8, '0');
-}
+// function hex2bin(hex){
+//     return (parseInt(hex, 16).toString(2)).padStart(8, '0');
+// }
 
 function step() {
 
@@ -78,42 +85,44 @@ function step() {
   //console.info(arrMem.length);
   //console.info('|' + arrMem[0] + '|');
 
-  let byteFromMemory = arrMem[pc];
+  let byteFromMemory = arrMem[emulator.pc];
 
-  switch(cpuState) {
+  switch(emulator.cpuState) {
     case 0:
-      ir1 = byteFromMemory;
+      emulator.ir1 = byteFromMemory;
       break;
     case 1:
-      ir2 = byteFromMemory;
+      emulator.ir2 = byteFromMemory;
       break;
     case 2:
-      ir3 = byteFromMemory;
+      emulator.ir3 = byteFromMemory;
       break;
     case 3:
       // Execute
-      let instruction = hex2bin(ir1) + hex2bin(ir2) + hex2bin(ir3);
-      console.info('instruction: ' + instruction);
+      emulator.execute();
 
-      let opcode = parseInt(instruction.substring(0, 6), 2);
-      let r1addr = parseInt(instruction.substring(6, 9), 2);
-      let r2addr = parseInt(instruction.substring(9, 12), 2);
-      let dataValue = parseInt(instruction.substring(16, 24), 2);
-      console.info('opcode: ' + opcode);
-      console.info('r1addr: ' + r1addr);
-      console.info('r2addr: ' + r2addr);
-      console.info('dataValue: ' + dataValue);
+      // let instruction = hex2bin(ir1) + hex2bin(ir2) + hex2bin(ir3);
+      // console.info('instruction: ' + instruction);
 
-      switch(opcode) {
-        case 0:
-          break;
-        case 1:
-          registers[r1addr] = dataValue;
-          break;
-        case 2:
-          registers[r1addr] = registers[r2addr];
-          break;
-      }
+      // let opcode = parseInt(instruction.substring(0, 6), 2);
+      // let r1addr = parseInt(instruction.substring(6, 9), 2);
+      // let r2addr = parseInt(instruction.substring(9, 12), 2);
+      // let dataValue = parseInt(instruction.substring(16, 24), 2);
+      // console.info('opcode: ' + opcode);
+      // console.info('r1addr: ' + r1addr);
+      // console.info('r2addr: ' + r2addr);
+      // console.info('dataValue: ' + dataValue);
+
+      // switch(opcode) {
+      //   case 0:
+      //     break;
+      //   case 1:
+      //     registers[r1addr] = dataValue;
+      //     break;
+      //   case 2:
+      //     registers[r1addr] = registers[r2addr];
+      //     break;
+      // }
 
       // registers.forEach(function (element, index, array) {
       //   console.info('register ' + index + ': ' + registers[index]);
@@ -124,17 +133,17 @@ function step() {
 
   // When string is empty, the .split method returns an 
   // array with one empty string, instead of an empty array
-  if(pc >= arrMem.length || arrMem.length == 1) {
+  if(emulator.pc >= arrMem.length || arrMem.length == 1) {
     //console.info('No memory for read at position ' + pc);
     //return;
-    pc = 0;
+    emulator.pc = 0;
   }
   else {
-    if(cpuState != 3) pc++;
+    if(emulator.cpuState != 3) emulator.pc++;
   }
 
-  cpuState++;
-  if(cpuState == 4) cpuState = 0;
+  emulator.cpuState++;
+  if(emulator.cpuState == 4) emulator.cpuState = 0;
 
   updateScreen();
 
