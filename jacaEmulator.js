@@ -4,16 +4,57 @@ export class JacaEmulator {
       // 1 - Fetch-2
       // 2 - Fetch-3
       // 3 - Execute
-      this.cpuState = 0;
+      // this.cpuState = 0;
 
-      this.pc = 0;
-      this.ir1 = 0;
-      this.ir2 = 0;
-      this.ir3 = 0;
+      // this.pc = 0;
+      // this.ir1 = 0;
+      // this.ir2 = 0;
+      // this.ir3 = 0;
 
-      this.registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+      // this.registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+
+      // this.arrMem = new Array();
+      this.reset();
     }
     
+    step () {
+      //console.info(arrMem.length);
+      //console.info('|' + arrMem[0] + '|');
+
+      let byteFromMemory = this.arrMem[this.pc];
+
+      switch(this.cpuState) {
+        case 0:
+          this.ir1 = byteFromMemory;
+          break;
+        case 1:
+          this.ir2 = byteFromMemory;
+          break;
+        case 2:
+          this.ir3 = byteFromMemory;
+          break;
+        case 3:
+          // Execute
+          this.execute();
+
+          break;
+      }
+
+      // When string is empty, the .split method returns an 
+      // array with one empty string, instead of an empty array
+      if(this.pc >= this.arrMem.length || this.arrMem.length == 1) {
+        //console.info('No memory for read at position ' + pc);
+        //return;
+        this.pc = 0;
+      }
+      else {
+        if(this.cpuState != 3) this.pc++;
+      }
+
+      this.cpuState++;
+      if(this.cpuState == 4) this.cpuState = 0;      
+    }
+
     execute () {
       let instruction = hex2bin(this.ir1) + hex2bin(this.ir2) + hex2bin(this.ir3);
       console.info('instruction: ' + instruction);
@@ -40,7 +81,7 @@ export class JacaEmulator {
     }
 
     reset () {
-      // console.info('reset()');
+      //console.info('reset()');
 
       this.cpuState = 0;
 
@@ -53,9 +94,13 @@ export class JacaEmulator {
       //   this.registers[index] = 0; // Not working. Don't know why
       // });
 
-      for(let i=0; i<registers.length; i++) {
-        this.registers[i] = 0
-      }
+      // for(let i=0; i<this.registers.length; i++) {
+      //   this.registers[i] = 0
+      // }
+
+      this.registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+
+      this.arrMem = new Array();
     }
 }
 

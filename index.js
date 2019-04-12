@@ -27,28 +27,9 @@ let memoryTest =
   '08 B0 00'      // LD B, L
 $('#memory').text(memoryTest);
 
-// 0 - Fetch-1
-// 1 - Fetch-2
-// 2 - Fetch-3
-// 3 - Execute
-// let cpuState; 
-// let pc;
-// let ir1;
-// let ir2;
-// let ir3;
-// let registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 let emulator = new J.JacaEmulator();
 
 function reset() {
-  // cpuState = 0;
-  // pc = 0;
-  // ir1 = 0;
-  // ir2 = 0;
-  // ir3 = 0;
-  // registers.forEach(function (element, index, array) {
-  //   registers[index] = 0;
-  // });
-
   emulator.reset();
 
   updateScreen();
@@ -65,85 +46,21 @@ function updateScreen() {
   $('#ir3').val(emulator.ir3);
 
   
-  emulator.registers.forEach(function (element, index, array) {
+  emulator.registers.forEach((element, index, array) => {
     console.info('register ' + index + ': ' + emulator.registers[index]);
     $('#registers div:nth-child(' + (index + 2) + ') input').val(emulator.registers[index]);
   });
 }
-
-// function hex2bin(hex){
-//     return (parseInt(hex, 16).toString(2)).padStart(8, '0');
-// }
 
 function step() {
 
   let startTime = new Date();
 
   let memory = $('#memory').val().trim();
-  let arrMem = memory.replace(/\n/g, ' ').split(' ');
+  
+  emulator.arrMem = memory.replace(/\n/g, ' ').split(' ');
 
-  //console.info(arrMem.length);
-  //console.info('|' + arrMem[0] + '|');
-
-  let byteFromMemory = arrMem[emulator.pc];
-
-  switch(emulator.cpuState) {
-    case 0:
-      emulator.ir1 = byteFromMemory;
-      break;
-    case 1:
-      emulator.ir2 = byteFromMemory;
-      break;
-    case 2:
-      emulator.ir3 = byteFromMemory;
-      break;
-    case 3:
-      // Execute
-      emulator.execute();
-
-      // let instruction = hex2bin(ir1) + hex2bin(ir2) + hex2bin(ir3);
-      // console.info('instruction: ' + instruction);
-
-      // let opcode = parseInt(instruction.substring(0, 6), 2);
-      // let r1addr = parseInt(instruction.substring(6, 9), 2);
-      // let r2addr = parseInt(instruction.substring(9, 12), 2);
-      // let dataValue = parseInt(instruction.substring(16, 24), 2);
-      // console.info('opcode: ' + opcode);
-      // console.info('r1addr: ' + r1addr);
-      // console.info('r2addr: ' + r2addr);
-      // console.info('dataValue: ' + dataValue);
-
-      // switch(opcode) {
-      //   case 0:
-      //     break;
-      //   case 1:
-      //     registers[r1addr] = dataValue;
-      //     break;
-      //   case 2:
-      //     registers[r1addr] = registers[r2addr];
-      //     break;
-      // }
-
-      // registers.forEach(function (element, index, array) {
-      //   console.info('register ' + index + ': ' + registers[index]);
-      // });
-
-      break;
-  }
-
-  // When string is empty, the .split method returns an 
-  // array with one empty string, instead of an empty array
-  if(emulator.pc >= arrMem.length || arrMem.length == 1) {
-    //console.info('No memory for read at position ' + pc);
-    //return;
-    emulator.pc = 0;
-  }
-  else {
-    if(emulator.cpuState != 3) emulator.pc++;
-  }
-
-  emulator.cpuState++;
-  if(emulator.cpuState == 4) emulator.cpuState = 0;
+  emulator.step();
 
   updateScreen();
 
@@ -152,18 +69,20 @@ function step() {
   $('#timeElapsed').val(timeDiff);
 }
 
-$(function () {
+$(() => {
   reset();
 
   let timer;
   let isRunning = false;
 
-  $('#play').click(function () {
+  $('#play').click(() => {
 
     if(isRunning) return;
 
-    $(this).removeClass('w3-green');
-    $(this).addClass('w3-red');
+    // $(this).removeClass('w3-green'); // $(this) is not working inside () =>
+    
+    $('#play').removeClass('w3-green');
+    $('#play').addClass('w3-red');
 
     isRunning = true;
     timer = window.setInterval(step, 5);
@@ -173,7 +92,7 @@ $(function () {
     // while (isRunning);
   });
 
-  $('#pause').click(function () {
+  $('#pause').click(() => {
     $('#play').removeClass('w3-red');
     $('#play').addClass('w3-green');
 
@@ -181,15 +100,15 @@ $(function () {
     window.clearInterval(timer);
   });
 
-  $('#step').click(function () {
+  $('#step').click(() => {
     step();
   });
 
-  $('#reset').click(function () {
+  $('#reset').click(() => {
     reset();
   });
 
-  $('#clearMemory').click(function () {
+  $('#clearMemory').click(() => {
     $('#memory').val('');
   });
 });
