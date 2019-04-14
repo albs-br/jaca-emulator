@@ -1,5 +1,7 @@
 "use strict";
 
+// import './manifest.json';
+
 // Import stylesheets
 import './style.css';
 //import 'w3css';
