@@ -12,11 +12,13 @@ h1, h2 {
 }
 
 .byteField {
-  width: 50px;
+  width: 50px !important;
+  height: 30px !important;
   text-align: right;
 }
 
 .addressField {
-  width: 100px;
+  width: 100px !important;
+  height: 30px !important;
   text-align: right;
 }
