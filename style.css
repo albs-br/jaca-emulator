@@ -15,6 +15,7 @@ h1, h2 {
   width: 50px !important;
   height: 30px !important;
   text-align: right;
+  margin: 0 auto;
 }
 
 .addressField {
