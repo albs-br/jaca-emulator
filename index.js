@@ -23,10 +23,11 @@ $('#version').text('v.' + pJson.version);
 $('title').text('JACA-2 Emulator v.' + pJson.version);
 
 let memoryTest = 
-  '04 00 0F\n' +  // LD A, 15
-  '05 80 30\n' +  // LD L, 0x30
-  '07 00 FF\n' +  // LD E, 255
-  '08 B0 00'      // LD B, L
+    '04 00 0F\n'   // LD A, 15
+  + '05 80 30\n'   // LD L, 0x30
+  + '07 00 FF\n'   // LD E, 255
+  + '08 B0 00\n'   // LD B, L
+  + '80 60 00\n'   // ADD A, E
 $('#memory').text(memoryTest);
 
 let emulator = new J.JacaEmulator();
@@ -68,7 +69,7 @@ function step() {
 
   let endTime = new Date();
   let timeDiff = endTime - startTime; //in ms
-  $('#timeElapsed').val(timeDiff);
+  //$('#timeElapsed').val(timeDiff);
 }
 
 $(() => {

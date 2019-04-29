@@ -126,19 +126,34 @@
           Execute
         </span>
       </li>
+      
       <li class="w3-padding-16">
-        <b>PC</b> <input type="text" id="pc" class="addressField" />
-        <b>IR</b>
-        <input type="text" id="ir1" class="byteField" />
-        <input type="text" id="ir2" class="byteField" />
-        <input type="text" id="ir3" class="byteField" />
+        <div class="w3-row-padding w3-center">
+          <div class="w3-col s6">
+            <label>PC</label>
+            <input id="pc" class="w3-input w3-border w3-round addressField" type="text" placeholder="">
+          </div>
+          <div class="w3-col s2">
+            <label>IR 1</label>
+            <input id="ir1" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+          <div class="w3-col s2">
+            <label>IR 2</label>
+            <input id="ir2" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+          <div class="w3-col s2">
+            <label>IR 3</label>
+            <input id="ir3" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+        </div>
       </li>
+      
       <li class="w3-padding-16">
         <div class="w3-row-padding">
           <b>Registers</b>
         </div>
         <div id="registers" class="w3-row-padding w3-center">
-          <div class="w3-col w3-hide-medium l2">
+          <div class="w3-col w3-hide-small w3-hide-medium l2">
             &nbsp;
           </div>
           <div class="w3-col s3 m1">
@@ -177,31 +192,47 @@
 
       </li>
 
-      <li class="w3-padding-16">
+      <!--li class="w3-padding-16">
         <b>RET</b> <input type="text" id="ret" class="addressField" />
         <b>Time last step</b> <input type="text" id="timeElapsed" class="addressField" /> ms
-      </li>
+      </li-->
 
       <li class="w3-padding-16">
-        <b>ALU</b> 
-        <input type="text" id="aluA" class="byteField" />
-        <input type="text" id="aluB" class="byteField" />
-        <input type="text" id="aluFunction" class="byteField" />
-        <input type="text" id="aluOut" class="byteField" />
+        <div class="w3-row-padding">
+          <b>ALU</b>
+        </div>
+        <div class="w3-row-padding w3-center">
+          <div class="w3-col s3">
+            <label>A in</label>
+            <input id="aluA" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+          <div class="w3-col s3">
+            <label>B in</label>
+            <input id="aluB" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+          <div class="w3-col s3">
+            <label>Function</label>
+            <input id="aluFunction" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+          <div class="w3-col s3">
+            <label>OUT</label>
+            <input id="aluOut" class="w3-input w3-border w3-round byteField" type="text" placeholder="">
+          </div>
+        </div>
       </li>
 
       <li class="w3-light-grey w3-padding-24">
         <button id="play" class="w3-button w3-green w3-padding-large">
-          <i class="fas fa-play"></i> Play
+          <i class="fas fa-play"></i> <span class="w3-hide-small">Play</span>
         </button>
         <button id="pause" class="w3-button w3-green w3-padding-large">
-          <i class="fas fa-pause"></i> Pause
+          <i class="fas fa-pause"></i> <span class="w3-hide-small">Pause</span>
         </button>
         <button id="step" class="w3-button w3-green w3-padding-large">
-          <i class="fas fa-step-forward"></i> Step
+          <i class="fas fa-step-forward"></i> <span class="w3-hide-small">Step</span>
         </button>
         <button id="reset" class="w3-button w3-green w3-padding-large">
-          <i class="fas fa-redo"></i> Reset
+          <i class="fas fa-redo"></i> <span class="w3-hide-small">Reset</span>
         </button>
       </li>
       

@@ -22,4 +22,5 @@ h1, h2 {
   width: 100px !important;
   height: 30px !important;
   text-align: right;
+  margin: 0 auto;
 }

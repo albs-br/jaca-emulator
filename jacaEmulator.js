@@ -63,20 +63,30 @@ export class JacaEmulator {
       let r1addr = parseInt(instruction.substring(6, 9), 2);
       let r2addr = parseInt(instruction.substring(9, 12), 2);
       let dataValue = parseInt(instruction.substring(16, 24), 2);
-      console.info('opcode: ' + opcode);
-      console.info('r1addr: ' + r1addr);
-      console.info('r2addr: ' + r2addr);
-      console.info('dataValue: ' + dataValue);
+      // console.info('opcode: ' + opcode);
+      // console.info('r1addr: ' + r1addr);
+      // console.info('r2addr: ' + r2addr);
+      // console.info('dataValue: ' + dataValue);
 
       switch(opcode) {
-        case 0:
+
+        case 0: // NO OP
           break;
-        case 1:
+
+        case 1: // LD R1, data
           this.registers[r1addr] = dataValue;
           break;
-        case 2:
+
+        case 2: // LD R1, R2
           this.registers[r1addr] = this.registers[r2addr];
           break;
+
+        case 32: // ADD R1, R2
+          let output = this.registers[r1addr] + this.registers[r2addr];
+          //output = parseInt(output, 2).toString().slice(-5);
+          this.registers[r1addr] = output;
+          break;
+
       }
     }
 
