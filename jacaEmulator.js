@@ -67,27 +67,40 @@ export class JacaEmulator {
       // console.info('r1addr: ' + r1addr);
       // console.info('r2addr: ' + r2addr);
       // console.info('dataValue: ' + dataValue);
+      let instructionFormatIndex;
+      let opcodeTxt = '';
+      let r1addrTxt = this.registerNames[r1addr];
+      let r2addrTxt = this.registerNames[r2addr];
 
       switch(opcode) {
 
         case 0: // NO OP
+          opcodeTxt = 'NO OP';
+          instructionFormatIndex = 0;
           break;
 
         case 1: // LD R1, data
+          opcodeTxt = 'LD';
+          instructionFormatIndex = 1;
           this.registers[r1addr] = dataValue;
           break;
 
         case 2: // LD R1, R2
+          opcodeTxt = 'LD';
+          instructionFormatIndex = 2;
           this.registers[r1addr] = this.registers[r2addr];
           break;
 
         case 32: // ADD R1, R2
+          opcodeTxt = 'ADD';
           let output = this.registers[r1addr] + this.registers[r2addr];
           //output = parseInt(output, 2).toString().slice(-5);
-          this.registers[r1addr] = output;
+          this.registers[r1addr] = (output <= 255) ? output : (output % 256);
           break;
 
       }
+
+      //console.info('Current instruction: ' + this.instructionFormats[instructionFormatIndex]);
     }
 
     reset () {
@@ -108,9 +121,21 @@ export class JacaEmulator {
       //   this.registers[i] = 0
       // }
 
+      // this.instructionFormats = new Array(
+      //   `${opcodeTxt}`,
+      //   `${opcodeTxt} ${r1addrTxt}, ${dataValue}`,
+      //   `${opcodeTxt} ${r1addrTxt}, ${r2addrTxt}`,
+      //   // more
+      // );
+      
+      this.registerNames = new Array('A', 'B', 'H', 'L', 'C', 'D', 'E', 'F');
       this.registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 
       this.arrMem = new Array();
+    }
+
+    currentInstruction (opcode) {
+      return this.instructionFormats[opcode];
     }
 }
 
