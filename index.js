@@ -40,8 +40,15 @@ function reset() {
 
 function updateScreen() {
   
-  $('.cpuState span').removeClass('w3-yellow');
-  $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-yellow');
+  $('.cpuState span')
+    .removeClass('w3-yellow')
+    .removeClass('w3-red');
+  if(emulator.cpuState == 3) {
+    $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-red');
+  }
+  else {
+    $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-yellow');
+  }
   
   $('#pc').val(emulator.pc);
   $('#ir1').val(emulator.ir1);
