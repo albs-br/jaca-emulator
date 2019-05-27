@@ -40,9 +40,7 @@ function reset() {
 
 function updateScreen() {
   
-  $('.cpuState span')
-    .removeClass('w3-yellow')
-    .removeClass('w3-red');
+  $('.cpuState span').removeClass('w3-yellow w3-red');
   if(emulator.cpuState == 3) {
     $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-red');
   }
