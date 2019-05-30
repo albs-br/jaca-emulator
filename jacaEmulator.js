@@ -90,6 +90,12 @@ export class JacaEmulator {
         this.pc = currentInstruction.address;
         break;
 
+      case 6: // JP Z, [addr]
+        if(this.Z_flag) {
+          this.pc = currentInstruction.address;
+        }
+        break;
+
       // ....
 
       case 32: // ADD R1, R2
@@ -146,6 +152,11 @@ export class JacaEmulator {
 
       case 5: // JP [addr]
         opcodeTxt = 'JP';
+        instructionFormatIndex = 3;
+        break;
+
+      case 6: // JP Z, [addr]
+        opcodeTxt = 'JP Z,';
         instructionFormatIndex = 3;
         break;
 

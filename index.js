@@ -28,6 +28,7 @@ let memoryTest =
   + '07 00 01\n'   // LD E, 1
   + '08 B0 00\n'   // LD B, L
   + '80 60 00\n'   // ADD A, E
+  + '18 00 00\n'   // JP Z, 0
   + '14 00 0C\n'   // JP 12
 $('#memory').text(memoryTest);
 
