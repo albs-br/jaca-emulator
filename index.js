@@ -25,9 +25,10 @@ $('title').text('JACA-2 Emulator v.' + pJson.version);
 let memoryTest = 
     '04 00 0F\n'   // LD A, 15
   + '05 80 30\n'   // LD L, 0x30
-  + '07 00 FF\n'   // LD E, 255
+  + '07 00 01\n'   // LD E, 1
   + '08 B0 00\n'   // LD B, L
   + '80 60 00\n'   // ADD A, E
+  + '14 00 0C\n'   // JP 12
 $('#memory').text(memoryTest);
 
 let emulator = new J.JacaEmulator();

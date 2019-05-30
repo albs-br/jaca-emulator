@@ -60,10 +60,11 @@ export class JacaEmulator {
     //console.info('instruction: ' + instruction);
 
     return {
-      opcode: parseInt(instruction.substring(0, 6), 2),
-      r1addr: parseInt(instruction.substring(6, 9), 2),
-      r2addr: parseInt(instruction.substring(9, 12), 2),
-      dataValue: parseInt(instruction.substring(16, 24), 2)
+      opcode: parseInt(instruction.substring(0, 6), 2),     // bits 0 to 5 (6 most significant bits)
+      r1addr: parseInt(instruction.substring(6, 9), 2),     // bits 6 to 8 (3 bits)
+      r2addr: parseInt(instruction.substring(9, 12), 2),    // bits 9 to 11 (3 bits)
+      dataValue: parseInt(instruction.substring(16, 24), 2),// bits 16 to 23 (8 bits)
+      address: parseInt(instruction.substring(9, 24), 2)    // bits 9 to 23 (15 bits)
     };
   }
 
@@ -83,6 +84,14 @@ export class JacaEmulator {
         this.registers[currentInstruction.r1addr] = this.registers[currentInstruction.r2addr];
         break;
 
+      // ....
+
+      case 5: // JP [addr]
+        this.pc = currentInstruction.address;
+        break;
+
+      // ....
+
       case 32: // ADD R1, R2
         let output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
         this.registers[currentInstruction.r1addr] = (output <= 255) ? output : (output % 256);
@@ -101,6 +110,7 @@ export class JacaEmulator {
     let r1Txt = this.registerNames[currentInstruction.r1addr];
     let r2Txt = this.registerNames[currentInstruction.r2addr];
     let dataValue = currentInstruction.dataValue;
+    let address = currentInstruction.address;
 
     switch(currentInstruction.opcode) {
 
@@ -119,6 +129,11 @@ export class JacaEmulator {
         instructionFormatIndex = 2;
         break;
 
+      case 5: // JP [addr]
+        opcodeTxt = 'JP';
+        instructionFormatIndex = 3;
+        break;
+
       case 32: // ADD R1, R2
         opcodeTxt = 'ADD';
         instructionFormatIndex = 2;
@@ -130,7 +145,8 @@ export class JacaEmulator {
         .replace('[opcode]', opcodeTxt)
         .replace('[r1]', r1Txt)
         .replace('[r2]', r2Txt)
-        .replace('[data]', dataValue);
+        .replace('[data]', dataValue)
+        .replace('[address]', address);
 
     return instructionText;
   }
@@ -155,6 +171,7 @@ export class JacaEmulator {
       '[opcode]',
       '[opcode] [r1], [data]',
       '[opcode] [r1], [r2]',
+      '[opcode] [address]',
       // more
     );
 
