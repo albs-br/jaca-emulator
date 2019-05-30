@@ -55,24 +55,54 @@ export class JacaEmulator {
     if(this.cpuState == 4) this.cpuState = 0;      
   }
 
-  execute () {
+  decodeIR () {
     let instruction = hex2bin(this.ir1) + hex2bin(this.ir2) + hex2bin(this.ir3);
     //console.info('instruction: ' + instruction);
 
-    let opcode = parseInt(instruction.substring(0, 6), 2);
-    let r1addr = parseInt(instruction.substring(6, 9), 2);
-    let r2addr = parseInt(instruction.substring(9, 12), 2);
-    let dataValue = parseInt(instruction.substring(16, 24), 2);
-    // console.info('opcode: ' + opcode);
-    // console.info('r1addr: ' + r1addr);
-    // console.info('r2addr: ' + r2addr);
-    // console.info('dataValue: ' + dataValue);
+    return {
+      opcode: parseInt(instruction.substring(0, 6), 2),
+      r1addr: parseInt(instruction.substring(6, 9), 2),
+      r2addr: parseInt(instruction.substring(9, 12), 2),
+      dataValue: parseInt(instruction.substring(16, 24), 2)
+    };
+  }
+
+  execute () {
+    let currentInstruction = this.decodeIR();
+
+    switch(currentInstruction.opcode) {
+
+      case 0: // NO OP
+        break;
+
+      case 1: // LD R1, data
+        this.registers[currentInstruction.r1addr] = currentInstruction.dataValue;
+        break;
+
+      case 2: // LD R1, R2
+        this.registers[currentInstruction.r1addr] = this.registers[currentInstruction.r2addr];
+        break;
+
+      case 32: // ADD R1, R2
+        let output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
+        this.registers[currentInstruction.r1addr] = (output <= 255) ? output : (output % 256);
+        break;
+    }
+  }
+
+  currentInstructionText () {
+
+    if(this.cpuState != 3) return '';
+
+    let currentInstruction = this.decodeIR();
+
     let instructionFormatIndex;
     let opcodeTxt = '';
-    let r1Txt = this.registerNames[r1addr];
-    let r2Txt = this.registerNames[r2addr];
+    let r1Txt = this.registerNames[currentInstruction.r1addr];
+    let r2Txt = this.registerNames[currentInstruction.r2addr];
+    let dataValue = currentInstruction.dataValue;
 
-    switch(opcode) {
+    switch(currentInstruction.opcode) {
 
       case 0: // NO OP
         opcodeTxt = 'NO OP';
@@ -82,42 +112,30 @@ export class JacaEmulator {
       case 1: // LD R1, data
         opcodeTxt = 'LD';
         instructionFormatIndex = 1;
-        this.registers[r1addr] = dataValue;
         break;
 
       case 2: // LD R1, R2
         opcodeTxt = 'LD';
         instructionFormatIndex = 2;
-        this.registers[r1addr] = this.registers[r2addr];
         break;
 
       case 32: // ADD R1, R2
         opcodeTxt = 'ADD';
         instructionFormatIndex = 2;
-        let output = this.registers[r1addr] + this.registers[r2addr];
-        //output = parseInt(output, 2).toString().slice(-5);
-        this.registers[r1addr] = (output <= 255) ? output : (output % 256);
         break;
     }
 
-    // console.info(r1addr);
-    // console.info(r2addr);
-
-    let instructionTxt = 
+    let instructionText = 
       this.instructionFormats[instructionFormatIndex]
         .replace('[opcode]', opcodeTxt)
         .replace('[r1]', r1Txt)
         .replace('[r2]', r2Txt)
         .replace('[data]', dataValue);
 
-    this.currentInstruction = instructionTxt;
-
-    // console.info('Current instruction: ' + instructionTxt);
+    return instructionText;
   }
 
   reset () {
-    //console.info('reset()');
-
     this.cpuState = 0;
 
     this.pc = 0;
@@ -139,11 +157,16 @@ export class JacaEmulator {
       '[opcode] [r1], [r2]',
       // more
     );
+
+    // this.instructions = new Array(
+    //   { instructionFormat: 0, opcodeTxt: 'NO OP' },
+    //   { instructionFormat: 1, opcodeTxt: 'LD' },
+    //   { instructionFormat: 2, opcodeTxt: 'LD' },
+    //   //{ instructionFormat: 0, opcodeTxt: 'NO OP' },
+    // );
     
     this.registerNames = new Array('A', 'B', 'H', 'L', 'C', 'D', 'E', 'F');
     this.registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
-
-    this.currentInstruction = '';
 
     this.arrMem = new Array();
   }

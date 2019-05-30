@@ -53,7 +53,9 @@ function updateScreen() {
   $('#ir2').val(emulator.ir2);
   $('#ir3').val(emulator.ir3);
 
-  $('#currentInstruction').text(emulator.currentInstruction);
+  console.info(emulator.currentInstructionText());
+
+  $('#currentInstruction').text(emulator.currentInstructionText());
 
   emulator.registers.forEach((element, index, array) => {
     //console.info('register ' + index + ': ' + emulator.registers[index]);
