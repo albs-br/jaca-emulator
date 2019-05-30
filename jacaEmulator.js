@@ -94,9 +94,24 @@ export class JacaEmulator {
 
       case 32: // ADD R1, R2
         let output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
-        this.registers[currentInstruction.r1addr] = (output <= 255) ? output : (output % 256);
+        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
         break;
     }
+  }
+
+  setAluOutput(output) {
+
+    if(output > 255) { 
+      this.C_flag = true;
+      output = output % 256;
+    }
+    else {
+      this.C_flag = false;
+    }
+
+    this.Z_flag = (output == 0);
+
+    return output;
   }
 
   currentInstructionText () {
@@ -158,6 +173,8 @@ export class JacaEmulator {
     this.ir1 = 0;
     this.ir2 = 0;
     this.ir3 = 0;
+    this.Z_flag = false;
+    this.C_flag = false;
 
     // this.registers.forEach(function (element, index, array) {
     //   this.registers[index] = 0; // Not working. Don't know why

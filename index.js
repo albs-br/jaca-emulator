@@ -41,6 +41,7 @@ function reset() {
 
 function updateScreen() {
   
+  // update CPU state
   $('.cpuState span').removeClass('w3-yellow w3-red');
   if(emulator.cpuState == 3) {
     $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-red');
@@ -54,7 +55,16 @@ function updateScreen() {
   $('#ir2').val(emulator.ir2);
   $('#ir3').val(emulator.ir3);
 
-  console.info(emulator.currentInstructionText());
+  // update ALU flags
+  $('#Z_flag, #C_flag').removeClass('w3-red');
+  if(emulator.Z_flag) {
+    $('#Z_flag').addClass('w3-red');
+  }
+  if(emulator.C_flag) {
+    $('#C_flag').addClass('w3-red');
+  }
+
+  // console.info(emulator.currentInstructionText());
 
   $('#currentInstruction').text(emulator.currentInstructionText());
 
