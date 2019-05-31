@@ -22,14 +22,23 @@ import * as J from './jacaEmulator.js';
 $('#version').text('v.' + pJson.version);
 $('title').text('JACA-2 Emulator v.' + pJson.version);
 
+// let memoryTest = 
+//     '04 00 0F\n'   // LD A, 15
+//   + '05 80 30\n'   // LD L, 0x30
+//   + '07 00 01\n'   // LD E, 1
+//   + '08 B0 00\n'   // LD B, L
+//   + '80 60 00\n'   // ADD A, E
+//   + '18 00 00\n'   // JP Z, 0
+//   + '14 00 0C\n'   // JP 12
+
 let memoryTest = 
-    '04 00 0F\n'   // LD A, 15
-  + '05 80 30\n'   // LD L, 0x30
-  + '07 00 01\n'   // LD E, 1
-  + '08 B0 00\n'   // LD B, L
-  + '80 60 00\n'   // ADD A, E
-  + '18 00 00\n'   // JP Z, 0
-  + '14 00 0C\n'   // JP 12
+    '04 00 05\n'   // LD A, 5
+  + '1C 00 09\n'  // CALL 9
+  + 'A0 00 00\n'  // INC A
+		
+  + 'A0 00 00\n'  // INC A
+  + '24 00 00\n'  // RET
+
 $('#memory').text(memoryTest);
 
 let emulator = new J.JacaEmulator();
@@ -52,6 +61,7 @@ function updateScreen() {
   }
   
   $('#pc').val(emulator.pc);
+  $('#ret').val(emulator.ret);
   $('#ir1').val(emulator.ir1);
   $('#ir2').val(emulator.ir2);
   $('#ir3').val(emulator.ir3);

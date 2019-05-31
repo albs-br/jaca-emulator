@@ -96,10 +96,33 @@ export class JacaEmulator {
         }
         break;
 
+      case 7: // CALL [addr]
+        this.ret = this.pc;
+        this.pc = currentInstruction.address;
+        break;
+
+      case 8: // CALL Z, [addr]
+        if(this.Z_flag) {
+          this.ret = this.pc;
+          this.pc = currentInstruction.address;
+        }
+        break;
+
+      case 9: // RET
+        this.pc = this.ret;
+        break;
+
       // ....
 
       case 32: // ADD R1, R2
         let output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
+        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
+        break;
+
+      // ....
+
+      case 40: // INC R1
+        let output = this.registers[currentInstruction.r1addr] + 1;
         this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
         break;
     }
@@ -150,6 +173,8 @@ export class JacaEmulator {
         instructionFormatIndex = 2;
         break;
 
+      //...
+
       case 5: // JP [addr]
         opcodeTxt = 'JP';
         instructionFormatIndex = 3;
@@ -160,10 +185,35 @@ export class JacaEmulator {
         instructionFormatIndex = 3;
         break;
 
+      case 7: // CALL [addr]
+        opcodeTxt = 'CALL';
+        instructionFormatIndex = 3;
+        break;
+
+      case 8: // CALL Z, [addr]
+        opcodeTxt = 'CALL Z,';
+        instructionFormatIndex = 3;
+        break;
+
+      case 9: // RET
+        opcodeTxt = 'RET';
+        instructionFormatIndex = 0;
+        break;
+
+      //...
+
       case 32: // ADD R1, R2
         opcodeTxt = 'ADD';
         instructionFormatIndex = 2;
         break;
+
+      //...
+
+      case 40: // INC R1
+        opcodeTxt = 'INC';
+        instructionFormatIndex = 4;
+        break;
+
     }
 
     let instructionText = 
@@ -181,6 +231,7 @@ export class JacaEmulator {
     this.cpuState = 0;
 
     this.pc = 0;
+    this.ret = 0;
     this.ir1 = 0;
     this.ir2 = 0;
     this.ir3 = 0;
@@ -200,6 +251,7 @@ export class JacaEmulator {
       '[opcode] [r1], [data]',
       '[opcode] [r1], [r2]',
       '[opcode] [address]',
+      '[opcode] [r1]',
       // more
     );
 
