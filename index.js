@@ -66,6 +66,10 @@ function updateScreen() {
   $('#ir2').val(emulator.ir2);
   $('#ir3').val(emulator.ir3);
 
+  $('#aluA').val(emulator.aluA);
+  $('#aluB').val(emulator.aluB);
+  $('#aluOut').val(emulator.aluOut);
+
   // update ALU flags
   $('#Z_flag, #C_flag').removeClass('w3-red');
   if(emulator.Z_flag) {

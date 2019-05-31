@@ -52,7 +52,9 @@ export class JacaEmulator {
     }
 
     this.cpuState++;
-    if(this.cpuState == 4) this.cpuState = 0;      
+    if(this.cpuState == 4) this.cpuState = 0;
+
+    this.updateALU();
   }
 
   decodeIR () {
@@ -70,6 +72,8 @@ export class JacaEmulator {
 
   execute () {
     let currentInstruction = this.decodeIR();
+
+    console.info('execute opcode: ' + currentInstruction.opcode);
 
     switch(currentInstruction.opcode) {
 
@@ -133,7 +137,7 @@ export class JacaEmulator {
 
   setAluOutput(output) {
 
-    if(output > 255) { 
+    if(output > 255) {
       this.C_flag = true;
       output = output % 256;
     }
@@ -146,20 +150,67 @@ export class JacaEmulator {
     return output;
   }
 
+  updateALU () {
+
+    if(this.cpuState != 3) {
+      this.aluA = 0;
+      this.aluB = 0;
+      this.aluOut = 0;
+      return;
+    }
+
+    let currentInstruction = this.decodeIR();
+
+    if(currentInstruction.opcode >= 32) { // check if is ALU operation
+      this.aluA = this.registers[currentInstruction.r1addr];
+      
+      let opcodeInfo = this.getOpcodeInfo(currentInstruction.opcode);
+
+      // check if ALU operation uses 1 or 2 registers as input
+      if(opcodeInfo.instructionFormatIndex == 4) {
+        this.aluB = 0;
+      }
+      else {      
+        this.aluB = this.registers[currentInstruction.r2addr];
+      }
+
+      this.aluOut = 'test';
+    }
+  }  
+
   currentInstructionText () {
 
     if(this.cpuState != 3) return '';
 
     let currentInstruction = this.decodeIR();
 
-    let instructionFormatIndex = 0;
-    let opcodeTxt = '';
+    let opcodeInfo = this.getOpcodeInfo(currentInstruction.opcode);
+    let opcodeTxt = opcodeInfo.opcodeTxt;
+    let instructionFormatIndex = opcodeInfo.instructionFormatIndex;
+
     let r1Txt = this.registerNames[currentInstruction.r1addr];
     let r2Txt = this.registerNames[currentInstruction.r2addr];
     let dataValue = currentInstruction.dataValue;
     let address = currentInstruction.address;
 
-    switch(currentInstruction.opcode) {
+    let instructionText = 
+      this.instructionFormats[instructionFormatIndex]
+        .replace('[opcode]', opcodeTxt)
+        .replace('[r1]', r1Txt)
+        .replace('[r2]', r2Txt)
+        .replace('[data]', dataValue)
+        .replace('[address]', address);
+
+    return instructionText;
+  }
+
+  getOpcodeInfo(opcode) {
+    let opcodeTxt = '';
+    let instructionFormatIndex = 0;
+    
+    console.info('getOpcodeInfo opcode: ' + opcode);
+
+    switch(opcode) {
 
       case 0: // NO OP
         opcodeTxt = 'NO OP';
@@ -221,15 +272,10 @@ export class JacaEmulator {
         alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
 
-    let instructionText = 
-      this.instructionFormats[instructionFormatIndex]
-        .replace('[opcode]', opcodeTxt)
-        .replace('[r1]', r1Txt)
-        .replace('[r2]', r2Txt)
-        .replace('[data]', dataValue)
-        .replace('[address]', address);
-
-    return instructionText;
+    return {
+      opcodeTxt: opcodeTxt,
+      instructionFormatIndex: instructionFormatIndex
+    };
   }
 
   reset () {
@@ -242,6 +288,9 @@ export class JacaEmulator {
     this.ir3 = 0;
     this.Z_flag = false;
     this.C_flag = false;
+    this.aluA = 0;
+    this.aluB = 0;
+    this.aluOut = 0;
 
     // this.registers.forEach(function (element, index, array) {
     //   this.registers[index] = 0; // Not working. Don't know why
