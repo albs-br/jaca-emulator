@@ -125,6 +125,9 @@ export class JacaEmulator {
         let output = this.registers[currentInstruction.r1addr] + 1;
         this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
         break;
+
+      default:
+        alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
   }
 
@@ -149,7 +152,7 @@ export class JacaEmulator {
 
     let currentInstruction = this.decodeIR();
 
-    let instructionFormatIndex;
+    let instructionFormatIndex = 0;
     let opcodeTxt = '';
     let r1Txt = this.registerNames[currentInstruction.r1addr];
     let r2Txt = this.registerNames[currentInstruction.r2addr];
@@ -214,6 +217,8 @@ export class JacaEmulator {
         instructionFormatIndex = 4;
         break;
 
+      default:
+        alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
 
     let instructionText = 
