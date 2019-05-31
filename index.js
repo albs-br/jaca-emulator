@@ -45,10 +45,10 @@ function updateScreen() {
   // update CPU state
   $('.cpuState span').removeClass('w3-yellow w3-red');
   if(emulator.cpuState == 3) {
-    $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-red');
+    $('.cpuState .cpuStateInner:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-red');
   }
   else {
-    $('.cpuState span:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-yellow');
+    $('.cpuState .cpuStateInner:nth-child(' + (emulator.cpuState + 1) + ')').addClass('w3-yellow');
   }
   
   $('#pc').val(emulator.pc);
