@@ -42,12 +42,13 @@ let memoryTest =
 $('#memory').text(memoryTest);
 
 $('#loadMemory').click(() => {
-  var x = document.getElementById("Demo");
-  if (x.className.indexOf("w3-show") == -1) {  
-    x.className += " w3-show";
-  } else { 
-    x.className = x.className.replace(" w3-show", "");
-  }
+  $('#loadMemoryMenu').toggleClass('w3-show');
+  // var x = document.getElementById("loadMemoryMenu");
+  // if (x.className.indexOf("w3-show") == -1) {  
+  //   x.className += " w3-show";
+  // } else { 
+  //   x.className = x.className.replace(" w3-show", "");
+  // }
 });
 
 let emulator = new J.JacaEmulator();

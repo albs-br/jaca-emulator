@@ -19,7 +19,7 @@
   <div class="w3-row-padding">
 
     <!-- Assembly -->
-    <div class="w3-col l3 m6 s6 w3-margin-bottom">
+    <div class="w3-col l3 m6 s12 w3-margin-bottom">
       <ul class="w3-ul w3-border w3-center w3-hover-shadow">
         <li class="w3-black w3-large w3-padding-16">Assembly</li>
         <li class="w3-padding-16">
@@ -90,7 +90,7 @@
     </div>
 
     <!-- Memory -->
-    <div class="w3-col l2 m6 s6 w3-margin-bottom">
+    <div class="w3-col l2 m6 s12 w3-margin-bottom">
       
       <ul class="w3-ul w3-border w3-center w3-hover-shadow">
         <li class="w3-black w3-large w3-padding-16">Memory</li>
@@ -107,17 +107,19 @@
         </li-->
         <li class="w3-light-grey w3-padding-24">
           <button id="clearMemory" class="w3-button w3-green w3-padding-large">
-            <i class="fas fa-trash"></i> Clear
+            <i class="fas fa-trash"></i>  <span class="w3-hide-small">Clear</span>
           </button>
           
-          <button id="loadMemory" class="w3-button w3-green w3-padding-large">
-            <i class="fas fa-eject"></i> Load
-          </button>
-          <div id="Demo" class="w3-dropdown-content w3-bar-block w3-border">
-            <a href="#" class="w3-bar-item w3-button">Link 1</a>
-            <a href="#" class="w3-bar-item w3-button">Link 2</a>
-            <a href="#" class="w3-bar-item w3-button">Link 3</a>
-          </div>          
+          <div class="w3-dropdown-click">
+            <button id="loadMemory" class="w3-button w3-green w3-padding-large">
+              <i class="fas fa-eject"></i>  <span class="w3-hide-small">Load</span>
+            </button>
+            <div id="loadMemoryMenu" class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+              <a href="#" class="w3-bar-item w3-button">Test Program 1</a>
+              <a href="#" class="w3-bar-item w3-button">Test Program 2</a>
+              <a href="#" class="w3-bar-item w3-button">Test Program 3</a>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
