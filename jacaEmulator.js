@@ -73,7 +73,7 @@ export class JacaEmulator {
   execute () {
     let currentInstruction = this.decodeIR();
 
-    console.info('execute opcode: ' + currentInstruction.opcode);
+    // console.info('execute opcode: ' + currentInstruction.opcode);
 
     switch(currentInstruction.opcode) {
 
@@ -208,7 +208,7 @@ export class JacaEmulator {
     let opcodeTxt = '';
     let instructionFormatIndex = 0;
     
-    console.info('getOpcodeInfo opcode: ' + opcode);
+    // console.info('getOpcodeInfo opcode: ' + opcode);
 
     switch(opcode) {
 

@@ -22,34 +22,39 @@ import * as J from './jacaEmulator.js';
 $('#version').text('v.' + pJson.version);
 $('title').text('JACA-2 Emulator v.' + pJson.version);
 
-// let memoryTest = 
-//     '04 00 0F\n'   // LD A, 15
-//   + '05 80 30\n'   // LD L, 0x30
-//   + '07 00 01\n'   // LD E, 1
-//   + '08 B0 00\n'   // LD B, L
-//   + '80 60 00\n'   // ADD A, E
-//   + '18 00 00\n'   // JP Z, 0
-//   + '14 00 0C\n'   // JP 12
+let testProgramsArray = [
+  {
+    name: 'Test program 1',
+    data: 
+          '04 00 0F\n'   // LD A, 15
+        + '05 80 30\n'   // LD L, 0x30
+        + '07 00 01\n'   // LD E, 1
+        + '08 B0 00\n'   // LD B, L
+        + '80 60 00\n'   // ADD A, E
+        + '18 00 00\n'   // JP Z, 0
+        + '14 00 0C\n'   // JP 12
+  },
+  {
+    name: 'Test program 2',
+    data: 
+          '04 00 05\n'   // LD A, 5
+        + '1C 00 09\n'  // CALL 9
+        + 'A0 00 00\n'  // INC A
+          
+        + 'A0 00 00\n'  // INC A
+        + '24 00 00\n'  // RET
+  }  
+];
 
-let memoryTest = 
-    '04 00 05\n'   // LD A, 5
-  + '1C 00 09\n'  // CALL 9
-  + 'A0 00 00\n'  // INC A
-		
-  + 'A0 00 00\n'  // INC A
-  + '24 00 00\n'  // RET
+function loadTestProgram(name) {
+  let program = testProgramsArray.find(p => p.name === name);
 
-$('#memory').text(memoryTest);
+  if(program == undefined) return '';
 
-$('#loadMemory').click(() => {
-  $('#loadMemoryMenu').toggleClass('w3-show');
-  // var x = document.getElementById("loadMemoryMenu");
-  // if (x.className.indexOf("w3-show") == -1) {  
-  //   x.className += " w3-show";
-  // } else { 
-  //   x.className = x.className.replace(" w3-show", "");
-  // }
-});
+  return program.data;
+}
+
+$('#memory').text(testProgramsArray[0].data);
 
 let emulator = new J.JacaEmulator();
 
@@ -158,4 +163,25 @@ $(() => {
   $('#clearMemory').click(() => {
     $('#memory').val('');
   });
+
+
+  $('#loadMemory').click(() => {
+    $('#loadMemoryMenu').toggleClass('w3-show');
+  });
+
+  testProgramsArray.forEach((item) => {
+    $('<a href="#" class="w3-bar-item w3-button">' + item.name + '</a>').appendTo("#loadMemoryMenu");
+  });
+
+  $('#loadMemoryMenu a').click((event) => {
+    let element = $(event.target);
+    let programData = loadTestProgram(element.text());
+
+    $('#memory').text(programData);
+
+    $('#loadMemoryMenu').removeClass('w3-show');
+
+    event.preventDefault();
+  });
+
 });
