@@ -51,7 +51,36 @@ let testProgramsArray = [
         + '44 02 00\n'  // OUT 1, A
         + 'B0 00 00\n'  // SHL A
         + '14 00 03\n'  // JP 3
-  }
+  },
+//   {
+//     name: 'Test all instr',
+//     data:
+//           '04	00	43
+// 07	00	C7
+// A0	00	00
+// A4	00	00
+// 80	60	00
+// 08	E0	00
+// 0B	00	00
+// 08	10	00
+// 84	60	00
+// 88	00	00
+// 8C	60	00
+// 90	60	00
+// 94	60	00
+// 98	60	00
+// 9C	60	00
+// A4	00	00
+// 28	00	60
+// 0C	80	60
+// 05	00	00
+// 05	80	60
+// '13	80	00
+// '2D	80	00
+// '12	00	00
+// '12	80	00
+// '
+//   }
 ];
 
 function loadTestProgram(name) {
@@ -136,7 +165,10 @@ function step() {
 
   let memory = $('#memory').val().trim();
   
-  emulator.arrMem = memory.replace(/\n/g, ' ').split(' ');
+  emulator.arrMem = memory
+    .replace(/\n/g, ' ')
+    .replace(/\t/g, ' ')
+    .split(' ');
 
   emulator.step();
 

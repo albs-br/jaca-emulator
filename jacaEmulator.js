@@ -72,7 +72,7 @@ export class JacaEmulator {
       r2addr: parseInt(instruction.substring(9, 12), 2),    // bits 9 to 11 (3 bits)
       dataValue: parseInt(instruction.substring(16, 24), 2),// bits 16 to 23 (8 bits)
       address: parseInt(instruction.substring(9, 24), 2),   // bits 9 to 23 (15 bits)
-      ioAddr: parseInt(instruction.substring(12, 15), 2)     // bits 12 to 14 (3 bits)
+      ioAddr: parseInt(instruction.substring(12, 15), 2)    // bits 12 to 14 (3 bits)
     };
   }
 
@@ -132,7 +132,13 @@ export class JacaEmulator {
 
       // ....
 
+      // ALU operations:
       case 32: // ADD R1, R2
+      case 33: // SUB R1, R2
+      case 34: // NOT R1
+      case 35: // AND R1, R2
+      case 36: // OR R1, R2
+      case 37: // XOR R1, R2
       // ....
       case 40: // INC R1
       // ....
@@ -149,23 +155,45 @@ export class JacaEmulator {
 
   executeAluOp(currentInstruction) {
     let output = 0;
+    let r1 = this.registers[currentInstruction.r1addr];
+    let r2 = this.registers[currentInstruction.r2addr];
     switch(currentInstruction.opcode) {
       case 32: // ADD R1, R2
-        output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
+        output = r1 + r2;
+        break;
+
+      case 33: // SUB R1, R2
+        output = r1 - r2;
+        break;
+
+      case 34: // NOT R1
+        output = ~r1;
+        break;
+
+      case 35: // AND R1, R2
+        output = r1 & r2;
+        break;
+
+      case 36: // OR R1, R2
+        output = r1 | r2;
+        break;
+
+      case 37: // XOR R1, R2
+        output = r1 ^ r2;
         break;
 
       // ....
 
       case 40: // INC R1
-        output = this.registers[currentInstruction.r1addr] + 1;
+        output = r1 + 1;
         break;
 
       case 44: // SHL R1
-        output = this.registers[currentInstruction.r1addr] << 1;
+        output = r1 << 1;
         break;
 
       case 45: // SHR R1
-        output = this.registers[currentInstruction.r1addr] >>> 1;
+        output = r1 >>> 1;
         break;
  
       default:
@@ -307,6 +335,31 @@ export class JacaEmulator {
 
       case 32: // ADD R1, R2
         opcodeTxt = 'ADD';
+        instructionFormatIndex = 2;
+        break;
+
+      case 33: // SUB R1, R2
+        opcodeTxt = 'SUB';
+        instructionFormatIndex = 2;
+        break;
+
+      case 34: // NOT R1
+        opcodeTxt = 'NOT';
+        instructionFormatIndex = 4;
+        break;
+
+      case 35: // AND R1, R2
+        opcodeTxt = 'AND';
+        instructionFormatIndex = 2;
+        break;
+
+      case 36: // OR R1, R2
+        opcodeTxt = 'OR';
+        instructionFormatIndex = 2;
+        break;
+
+      case 37: // XOR R1, R2
+        opcodeTxt = 'XOR';
         instructionFormatIndex = 2;
         break;
 
