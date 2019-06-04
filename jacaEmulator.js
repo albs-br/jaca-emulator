@@ -1,4 +1,7 @@
+//import Conversion from './conversion.js';
+
 export class JacaEmulator {
+
   constructor () {
     // 0 - Fetch-1
     // 1 - Fetch-2
@@ -58,7 +61,9 @@ export class JacaEmulator {
   }
 
   decodeIR () {
-    let instruction = hex2bin(this.ir1) + hex2bin(this.ir2) + hex2bin(this.ir3);
+    let instruction = hex2bin(this.ir1) + 
+                      hex2bin(this.ir2) + 
+                      hex2bin(this.ir3);
     //console.info('instruction: ' + instruction);
 
     return {
@@ -325,6 +330,7 @@ export class JacaEmulator {
   }
 }
 
+//TODO: make it work on conversion.js file
 function hex2bin(hex){
   return (parseInt(hex, 16).toString(2)).padStart(8, '0');
 }

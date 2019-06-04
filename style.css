@@ -28,8 +28,14 @@ h1, h2 {
 .led {
   width: 15px;
   height: 15px;
-  /*border: 1px 1px 1px 0 solid black;*/
+  /* border: 1px 1px 1px 0 solid black; */
   border: 1px solid;
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
   margin-top: 25px;
   display: inline-block;
+}
+
+.hi {
+  background-color: red;
 }

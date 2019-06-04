@@ -37,7 +37,7 @@ let testProgramsArray = [
   {
     name: 'Test program 2',
     data: 
-          '04 00 05\n'   // LD A, 5
+          '04 00 05\n'  // LD A, 5
         + '1C 00 09\n'  // CALL 9
         + 'A0 00 00\n'  // INC A
           
@@ -103,10 +103,21 @@ function updateScreen() {
     $('#registers div:nth-child(' + (index + 2) + ') input').val(emulator.registers[index]);
   });
 
+  // emulator.outputReg = 2; //[debug]
   $('#outputReg').val(emulator.outputReg);
   $('#outputLeds').empty();
+  let outputRegBin = dec2bin(emulator.outputReg);
+  //console.info(outputRegBin);
   for(let i=0; i<8; i++) {
-    $('<div class="led"></div>').appendTo("#outputLeds");
+    let bit = outputRegBin.toString().charAt(i);
+    let classAttr = '';
+    if(bit == "0") {
+      classAttr = 'led';
+    }
+    else {
+      classAttr = 'led hi';
+    }
+    $('<div class="' + classAttr +  '"></div>').appendTo("#outputLeds");
   }
 
 }
@@ -128,6 +139,7 @@ function step() {
   //$('#timeElapsed').val(timeDiff);
 }
 
+// Jquery.ready:
 $(() => {
   reset();
 
@@ -192,3 +204,9 @@ $(() => {
   });
 
 });
+
+
+//TODO: make it work on conversion.js file
+function dec2bin(dec){
+  return (parseInt(dec, 10).toString(2)).padStart(8, '0');
+}
