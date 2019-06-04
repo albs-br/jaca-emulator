@@ -102,6 +102,13 @@ function updateScreen() {
     //console.info('register ' + index + ': ' + emulator.registers[index]);
     $('#registers div:nth-child(' + (index + 2) + ') input').val(emulator.registers[index]);
   });
+
+  $('#outputReg').val(emulator.outputReg);
+  $('#outputLeds').empty();
+  for(let i=0; i<8; i++) {
+    $('<div class="led"></div>').appendTo("#outputLeds");
+  }
+
 }
 
 function step() {

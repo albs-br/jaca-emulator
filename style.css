@@ -24,3 +24,12 @@ h1, h2 {
   text-align: right;
   margin: 0 auto;
 }
+
+.led {
+  width: 15px;
+  height: 15px;
+  /*border: 1px 1px 1px 0 solid black;*/
+  border: 1px solid;
+  margin-top: 25px;
+  display: inline-block;
+}

@@ -319,6 +319,8 @@ export class JacaEmulator {
     this.registerNames = new Array('A', 'B', 'H', 'L', 'C', 'D', 'E', 'F');
     this.registers = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 
+    this.outputReg = 0;
+
     this.arrMem = new Array();
   }
 }
