@@ -43,7 +43,15 @@ let testProgramsArray = [
           
         + 'A0 00 00\n'  // INC A
         + '24 00 00\n'  // RET
-  }  
+  },
+  {
+    name: 'Test OUT/SHL instr',
+    data: 
+          '04 00 01\n'  // LD A, 1
+        + '44 02 00\n'  // OUT 1, A
+        + 'B0 00 00\n'  // SHL A
+        + '14 00 03\n'  // JP 3
+  }
 ];
 
 function loadTestProgram(name) {

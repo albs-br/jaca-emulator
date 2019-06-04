@@ -71,7 +71,8 @@ export class JacaEmulator {
       r1addr: parseInt(instruction.substring(6, 9), 2),     // bits 6 to 8 (3 bits)
       r2addr: parseInt(instruction.substring(9, 12), 2),    // bits 9 to 11 (3 bits)
       dataValue: parseInt(instruction.substring(16, 24), 2),// bits 16 to 23 (8 bits)
-      address: parseInt(instruction.substring(9, 24), 2)    // bits 9 to 23 (15 bits)
+      address: parseInt(instruction.substring(9, 24), 2),   // bits 9 to 23 (15 bits)
+      ioAddr: parseInt(instruction.substring(12, 15), 2)     // bits 12 to 14 (3 bits)
     };
   }
 
@@ -123,31 +124,55 @@ export class JacaEmulator {
 
       // ....
 
-      case 32: // ADD R1, R2
-        let output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
-        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
+      case 17: // OUT [OD_addr], R1, R2
+        if(currentInstruction.ioAddr == 1) { // Output Register
+          this.outputReg = this.registers[currentInstruction.r1addr];
+        }
         break;
 
       // ....
 
+      case 32: // ADD R1, R2
+      // ....
       case 40: // INC R1
-        let output = this.registers[currentInstruction.r1addr] + 1;
-        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
-        break;
-
+      // ....
       case 44: // SHL R1
-        let output = this.registers[currentInstruction.r1addr] << 1;
-        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
-        break;
-
       case 45: // SHR R1
-        let output = this.registers[currentInstruction.r1addr] >>> 1;
+        let output = this.executeAluOp(currentInstruction);
         this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
         break;
 
       default:
         alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
+  }
+
+  executeAluOp(currentInstruction) {
+    let output = 0;
+    switch(currentInstruction.opcode) {
+      case 32: // ADD R1, R2
+        output = this.registers[currentInstruction.r1addr] + this.registers[currentInstruction.r2addr];
+        break;
+
+      // ....
+
+      case 40: // INC R1
+        output = this.registers[currentInstruction.r1addr] + 1;
+        break;
+
+      case 44: // SHL R1
+        output = this.registers[currentInstruction.r1addr] << 1;
+        break;
+
+      case 45: // SHR R1
+        output = this.registers[currentInstruction.r1addr] >>> 1;
+        break;
+ 
+      default:
+        alert('Opcode ' + currentInstruction.opcode + ' not implemented');
+    }
+
+    return output;
   }
 
   setAluOutput(output) {
@@ -189,7 +214,7 @@ export class JacaEmulator {
         this.aluB = this.registers[currentInstruction.r2addr];
       }
 
-      this.aluOut = 'test';
+      this.aluOut = this.executeAluOp(currentInstruction);
     }
   }  
 
@@ -207,6 +232,7 @@ export class JacaEmulator {
     let r2Txt = this.registerNames[currentInstruction.r2addr];
     let dataValue = currentInstruction.dataValue;
     let address = currentInstruction.address;
+    let ioAddr = currentInstruction.ioAddr;
 
     let instructionText = 
       this.instructionFormats[instructionFormatIndex]
@@ -214,7 +240,8 @@ export class JacaEmulator {
         .replace('[r1]', r1Txt)
         .replace('[r2]', r2Txt)
         .replace('[data]', dataValue)
-        .replace('[address]', address);
+        .replace('[address]', address)
+        .replace('[io_addr]', ioAddr);
 
     return instructionText;
   }
@@ -267,6 +294,13 @@ export class JacaEmulator {
       case 9: // RET
         opcodeTxt = 'RET';
         instructionFormatIndex = 0;
+        break;
+
+      //...
+
+      case 17: // OUT [OD_addr], R1, R2
+        opcodeTxt = 'OUT';
+        instructionFormatIndex = 5;
         break;
 
       //...
@@ -331,6 +365,7 @@ export class JacaEmulator {
       '[opcode] [r1], [r2]',
       '[opcode] [address]',
       '[opcode] [r1]',
+      '[opcode] [io_addr], [r1], [r2]',
       // more
     );
 
