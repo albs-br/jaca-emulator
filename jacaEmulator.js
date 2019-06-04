@@ -135,6 +135,16 @@ export class JacaEmulator {
         this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
         break;
 
+      case 44: // SHL R1
+        let output = this.registers[currentInstruction.r1addr] << 1;
+        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
+        break;
+
+      case 45: // SHR R1
+        let output = this.registers[currentInstruction.r1addr] >>> 1;
+        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
+        break;
+
       default:
         alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
@@ -270,6 +280,16 @@ export class JacaEmulator {
 
       case 40: // INC R1
         opcodeTxt = 'INC';
+        instructionFormatIndex = 4;
+        break;
+
+      case 44: // SHL R1
+        opcodeTxt = 'SHL';
+        instructionFormatIndex = 4;
+        break;
+
+      case 45: // SHR R1
+        opcodeTxt = 'SHR';
         instructionFormatIndex = 4;
         break;
 
