@@ -139,13 +139,15 @@ export class JacaEmulator {
       case 35: // AND R1, R2
       case 36: // OR R1, R2
       case 37: // XOR R1, R2
-      // ....
+      case 38: // NOR R1, R2
+      case 39: // XNOR R1, R2
       case 40: // INC R1
+      case 41: // DEC R1
       // ....
       case 44: // SHL R1
       case 45: // SHR R1
         let output = this.executeAluOp(currentInstruction);
-        this.registers[currentInstruction.r1addr] = this.setAluOutput(output);
+        this.registers[currentInstruction.r1addr] = output; // this.setAluOutput(output);
         break;
 
       default:
@@ -182,11 +184,23 @@ export class JacaEmulator {
         output = r1 ^ r2;
         break;
 
-      // ....
+      case 38: // NOR R1, R2
+        output = ~(r1 | r2);
+        break;
+
+      case 39: // XNOR R1, R2
+        output = ~(r1 ^ r2);
+        break;
 
       case 40: // INC R1
         output = r1 + 1;
         break;
+
+      case 41: // DEC R1
+        output = r1 - 1;
+        break;
+
+      // ....
 
       case 44: // SHL R1
         output = r1 << 1;
@@ -200,14 +214,18 @@ export class JacaEmulator {
         alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
 
-    return output;
+    return this.setAluOutput(output);
   }
 
   setAluOutput(output) {
 
-    if(output > 255) {
+    if(output < 0) {
+      this.C_flag = false;
+      output = output & 255; // keep only 8 lower bits
+    }
+    else if(output > 255) {
       this.C_flag = true;
-      output = output % 256;
+      output = output & 255; // keep only 8 lower bits
     }
     else {
       this.C_flag = false;
@@ -363,12 +381,27 @@ export class JacaEmulator {
         instructionFormatIndex = 2;
         break;
 
-      //...
+      case 38: // NOR R1, R2
+        opcodeTxt = 'NOR';
+        instructionFormatIndex = 2;
+        break;
+
+      case 39: // XNOR R1, R2
+        opcodeTxt = 'XNOR';
+        instructionFormatIndex = 2;
+        break;
 
       case 40: // INC R1
         opcodeTxt = 'INC';
         instructionFormatIndex = 4;
         break;
+
+      case 41: // DEC R1
+        opcodeTxt = 'DEC';
+        instructionFormatIndex = 4;
+        break;
+
+      //...
 
       case 44: // SHL R1
         opcodeTxt = 'SHL';
@@ -381,7 +414,7 @@ export class JacaEmulator {
         break;
 
       default:
-        alert('Opcode ' + currentInstruction.opcode + ' not implemented');
+        alert('Opcode ' + opcode + ' not implemented');
     }
 
     return {

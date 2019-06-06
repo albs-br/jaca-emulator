@@ -53,35 +53,35 @@ let testProgramsArray = [
         + '18 00 00\n'  // JP Z, 0
         + '14 00 03\n'  // JP 3
   },
-//   {
-//     name: 'Test all instr',
-//     data:
-//           '04	00	43
-// 07	00	C7
-// A0	00	00
-// A4	00	00
-// 80	60	00
-// 08	E0	00
-// 0B	00	00
-// 08	10	00
-// 84	60	00
-// 88	00	00
-// 8C	60	00
-// 90	60	00
-// 94	60	00
-// 98	60	00
-// 9C	60	00
-// A4	00	00
-// 28	00	60
-// 0C	80	60
-// 05	00	00
-// 05	80	60
-// '13	80	00
-// '2D	80	00
-// '12	00	00
-// '12	80	00
-// '
-//   }
+  {
+    name: 'Test all instr',
+    data:
+          '04 00 43\n'	// LD A, 0x43		// 67 in decimal
+        + '07 00 C7\n'	// LD E, 0xc7		// 199 in decimal
+        + 'A0 00 00\n'	// INC A		
+        + 'A4 00 00\n'	// DEC A		
+        + '80 60 00\n'	// ADD A, E			// A should be 266 - 256 = 10 (0xA)
+        + '08 E0 00\n'	// LD B, E			// Reverse A and E registers, A will be  = 199 and E = 10
+        + '0B 00 00\n'	// LD E, A			
+        + '08 10 00\n'	// LD A, B			
+        + '84 60 00\n'	// SUB A, E			// A = 189
+        + '88 00 00\n'	// NOT A			  // A = 66
+        + '8C 60 00\n'	// AND A, E			// A = 2
+        + '90 60 00\n'	// OR A, E			// A = 10
+        + '94 60 00\n'	// XOR A, E			// A = 0
+        + '98 60 00\n'	// NOR A, E			// A = 245
+        + '9C 60 00\n'	// XNOR A, E		// A = 0
+        + 'A4 00 00\n'	// DEC A			  // A = 255
+        + '28 00 60\n'	// ST [0x60], A		
+        + '0C 80 60\n'	// LD B, [0x60]	// B = 255
+        + '05 00 00\n'	// LD H, 0x0		// H = 0x0
+        + '05 80 60\n'	// LD L, 0x60		// L = 0x60
+        + '13 80 00\n'	// LD F, [HL]		// F = 255
+        + '2D 80 00\n'	// ST [HL], L		
+        + '12 00 00\n'	// LD C, [HL]		// C = 0x60
+        + '12 80 00\n'	// LD D, [HL]		// D = 0x60
+                        // Lacks testing the JP, JP Z and OUT instructions
+  }
 ];
 
 function loadTestProgram(name) {
