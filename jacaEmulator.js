@@ -124,6 +124,21 @@ export class JacaEmulator {
 
       // ....
 
+      case 12: // JP C, [addr]
+        if(this.C_flag) {
+          this.pc = currentInstruction.address;
+        }
+        break;
+
+      case 13: // CALL C, [addr]
+        if(this.C_flag) {
+          this.ret = this.pc;
+          this.pc = currentInstruction.address;
+        }
+        break;
+
+      // ....
+
       case 17: // OUT [OD_addr], R1, R2
         if(currentInstruction.ioAddr == 1) { // Output Register
           this.outputReg = this.registers[currentInstruction.r1addr];
@@ -340,6 +355,18 @@ export class JacaEmulator {
       case 9: // RET
         opcodeTxt = 'RET';
         instructionFormatIndex = 0;
+        break;
+
+      //...
+
+      case 12: // JP C, [addr]
+        opcodeTxt = 'JP C,';
+        instructionFormatIndex = 3;
+        break;
+
+      case 13: // CALL C, [addr]
+        opcodeTxt = 'CALL C,';
+        instructionFormatIndex = 3;
         break;
 
       //...

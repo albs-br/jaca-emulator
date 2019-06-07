@@ -81,7 +81,16 @@ let testProgramsArray = [
         + '12 00 00\n'	// LD C, [HL]		// C = 0x60
         + '12 80 00\n'	// LD D, [HL]		// D = 0x60
                         // Lacks testing the JP, JP Z and OUT instructions
-  }
+  },
+  {
+    name: 'Test CALL C instr',
+    data:
+          'A0 00 00\n'	// INC A		
+        + '34 00 09\n'	// CALL C, 9
+        + '14 00 00\n'	// JP 0
+        + 'A0 80 00\n'	// INC B
+        + '80 60 00\n'	// RET
+  }  
 ];
 
 function loadTestProgram(name) {
