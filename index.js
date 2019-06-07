@@ -90,6 +90,11 @@ let testProgramsArray = [
         + '14 00 00\n'	// JP 0
         + 'A0 80 00\n'	// INC B
         + '80 60 00\n'	// RET
+  },
+  {
+    name: 'Test LD R1, [addr] instr',
+    data:
+          '0C 00 00\n'	// LD A, 0
   }  
 ];
 

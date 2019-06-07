@@ -94,6 +94,10 @@ export class JacaEmulator {
         this.registers[currentInstruction.r1addr] = this.registers[currentInstruction.r2addr];
         break;
 
+      case 3: // LD R1, [addr]
+        this.registers[currentInstruction.r1addr] = hex2dec(this.arrMem[currentInstruction.address]);
+        break;
+
       // ....
 
       case 5: // JP [addr]
@@ -330,6 +334,11 @@ export class JacaEmulator {
         instructionFormatIndex = 2;
         break;
 
+      case 3: // LD R1, [addr]
+        opcodeTxt = 'LD';
+        instructionFormatIndex = 6;
+        break;
+
       //...
 
       case 5: // JP [addr]
@@ -479,6 +488,7 @@ export class JacaEmulator {
       '[opcode] [address]',
       '[opcode] [r1]',
       '[opcode] [io_addr], [r1], [r2]',
+      '[opcode] [r1], [[address]]',
       // more
     );
 
@@ -501,4 +511,8 @@ export class JacaEmulator {
 //TODO: make it work on conversion.js file
 function hex2bin(hex){
   return (parseInt(hex, 16).toString(2)).padStart(8, '0');
+}
+
+function hex2dec(hex){
+  return parseInt(hex, 16).toString(10);
 }
