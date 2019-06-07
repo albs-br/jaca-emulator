@@ -1,5 +1,7 @@
 //import Conversion from './conversion.js';
 
+const RAM_SIZE = 65536;
+
 export class JacaEmulator {
 
   constructor () {
@@ -60,6 +62,20 @@ export class JacaEmulator {
     this.updateALU();
   }
 
+  loadMemory(data) {
+    this.clearMemory();
+    
+    console.info(this.arrMem[255]);
+
+    let $this = this;
+    data.forEach(function(element, index) {
+      $this.arrMem[index] = element;
+    });
+
+    console.info(this.arrMem[255]);
+
+  }
+
   decodeIR () {
     let instruction = hex2bin(this.ir1) + 
                       hex2bin(this.ir2) + 
@@ -95,6 +111,11 @@ export class JacaEmulator {
         break;
 
       case 3: // LD R1, [addr]
+
+        // console.info(currentInstruction.address);
+        // console.info(this.arrMem[currentInstruction.address]);
+        // console.info(hex2dec(this.arrMem[currentInstruction.address]));
+
         this.registers[currentInstruction.r1addr] = hex2dec(this.arrMem[currentInstruction.address]);
         break;
 
@@ -485,7 +506,7 @@ export class JacaEmulator {
       '[opcode]',
       '[opcode] [r1], [data]',
       '[opcode] [r1], [r2]',
-      '[opcode] [address]',
+      '[opcode] [[address]]',
       '[opcode] [r1]',
       '[opcode] [io_addr], [r1], [r2]',
       '[opcode] [r1], [[address]]',
@@ -504,7 +525,11 @@ export class JacaEmulator {
 
     this.outputReg = 0;
 
-    this.arrMem = new Array();
+    this.clearMemory();
+  }
+
+  clearMemory() {
+      this.arrMem = new Array(RAM_SIZE).fill('00');
   }
 }
 

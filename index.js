@@ -95,6 +95,10 @@ let testProgramsArray = [
     name: 'Test LD R1, [addr] instr',
     data:
           '0C 00 00\n'	// LD A, 0
+        + '0C 80 0A\n'	// LD B, 10
+        + '0C 00 ff\n'	// LD A, 255
+        + '0C 7f ff\n'	// LD A, 32767
+        + '0C ff ff\n'	// LD B, 32767
   }  
 ];
 
@@ -180,10 +184,12 @@ function step() {
 
   let memory = $('#memory').val().trim();
   
-  emulator.arrMem = memory
+  let data = memory
     .replace(/\n/g, ' ')
     .replace(/\t/g, ' ')
     .split(' ');
+
+  emulator.loadMemory(data);
 
   emulator.step();
 
