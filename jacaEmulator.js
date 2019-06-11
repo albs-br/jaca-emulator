@@ -65,15 +65,10 @@ export class JacaEmulator {
   loadMemory(data) {
     this.clearMemory();
     
-    console.info(this.arrMem[255]);
-
     let $this = this;
     data.forEach(function(element, index) {
       $this.arrMem[index] = element;
     });
-
-    console.info(this.arrMem[255]);
-
   }
 
   decodeIR () {
@@ -111,6 +106,10 @@ export class JacaEmulator {
         break;
 
       case 3: // LD R1, [addr]
+
+        console.info(currentInstruction.address);
+        console.info(this.arrMem[currentInstruction.address]);
+        console.info(hex2dec(this.arrMem[currentInstruction.address]));
 
         this.registers[currentInstruction.r1addr] = hex2dec(this.arrMem[currentInstruction.address]);
         break;
@@ -152,7 +151,23 @@ export class JacaEmulator {
         this.pc = this.ret;
         break;
 
-      // ....
+      case 10: // ST [addr], R1
+
+        // console.info(this.registers[currentInstruction.r1addr]);
+        // console.info(dec2hex(this.registers[currentInstruction.r1addr]));
+        
+        console.info('before: ' + this.arrMem[currentInstruction.address]);
+
+        this.arrMem[currentInstruction.address] = dec2hex(this.registers[currentInstruction.r1addr]);
+        console.info('after: ' + this.arrMem[currentInstruction.address]);
+        break;
+
+      case 11: // ST [HL], R1
+
+        let address = this.getAddressFromHL();
+
+        this.arrMem[address] = hex2dec(this.registers[currentInstruction.r1addr]);
+        break;
 
       case 12: // JP C, [addr]
         if(this.C_flag) {
@@ -201,8 +216,9 @@ export class JacaEmulator {
   }
 
   getAddressFromHL() {
-    let h = this.registers[2]; // register H
-    let l = this.registers[3]; // register L
+    let h = this.registers[2];  // register H
+    h = h & 127;                // keep only 7 lower bits
+    let l = this.registers[3];  // register L
 
     let address = (h*256) + l;
 
@@ -374,7 +390,6 @@ export class JacaEmulator {
         instructionFormatIndex = 6;
         break;
 
-
       case 4: // LD R1, [HL]
         opcodeTxt = 'LD';
         instructionFormatIndex = 7;
@@ -405,7 +420,15 @@ export class JacaEmulator {
         instructionFormatIndex = 0;
         break;
 
-      //...
+      case 10: // ST [addr], R1
+        opcodeTxt = 'ST';
+        instructionFormatIndex = 8;
+        break;
+
+      case 11: // ST [HL], R1
+        opcodeTxt = 'ST';
+        instructionFormatIndex = 9;
+        break;
 
       case 12: // JP C, [addr]
         opcodeTxt = 'JP C,';
@@ -528,7 +551,9 @@ export class JacaEmulator {
       '[opcode] [r1]',
       '[opcode] [io_addr], [r1], [r2]',
       '[opcode] [r1], [[address]]',
-      '[opcode] [r1], [HL]'
+      '[opcode] [r1], [HL]',
+      '[opcode] [[address]], [r1]',
+      '[opcode] [HL], [r1]'
       // more
     );
 
@@ -559,4 +584,8 @@ function hex2bin(hex){
 
 function hex2dec(hex){
   return parseInt(hex, 16).toString(10);
+}
+
+function dec2hex(dec){
+  return (parseInt(dec, 10).toString(16)).padStart(2, '0');
 }

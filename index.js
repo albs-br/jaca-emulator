@@ -94,11 +94,11 @@ let testProgramsArray = [
   {
     name: 'Test LD R1, [addr] instr',
     data:
-          '0C 00 00\n'	// LD A, 0
-        + '0C 80 0A\n'	// LD B, 10
-        + '0C 00 ff\n'	// LD A, 255
-        + '0C 7f ff\n'	// LD A, 32767
-        + '0C ff ff\n'	// LD B, 32767
+          '0C 00 00\n'	// LD A, [0]
+        + '0C 80 0A\n'	// LD B, [10]
+        + '0C 00 ff\n'	// LD A, [255]
+        + '0C 7f ff\n'	// LD A, [32767]
+        + '0C ff ff\n'	// LD B, [32767]
   },
   {
     name: 'Test LD R1, [HL] instr',
@@ -106,7 +106,14 @@ let testProgramsArray = [
           '05 00 00\n'	// LD H, 0
         + '05 80 04\n'	// LD L, 4
         + '10 00 00\n'	// LD A, [HL]
-  }  
+  },
+  {
+    name: 'Test ST [addr], R1 instr',
+    data:
+          '04 00 06\n'  // LD A, 6
+        + '28 00 0A\n'	// ST [10], A
+        + '0C 80 0A\n'	// LD B, [10]
+  },
 ];
 
 function loadTestProgram(name) {
