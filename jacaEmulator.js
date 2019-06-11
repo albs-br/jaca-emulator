@@ -112,14 +112,19 @@ export class JacaEmulator {
 
       case 3: // LD R1, [addr]
 
-        // console.info(currentInstruction.address);
-        // console.info(this.arrMem[currentInstruction.address]);
-        // console.info(hex2dec(this.arrMem[currentInstruction.address]));
-
         this.registers[currentInstruction.r1addr] = hex2dec(this.arrMem[currentInstruction.address]);
         break;
 
-      // ....
+      case 4: // LD R1, [HL]
+
+        let address = this.getAddressFromHL();
+
+        // console.info(address);
+        // console.info(this.arrMem[address]);
+        // console.info(hex2dec(this.arrMem[address]));
+
+        this.registers[currentInstruction.r1addr] = hex2dec(this.arrMem[address]);
+        break;
 
       case 5: // JP [addr]
         this.pc = currentInstruction.address;
@@ -193,6 +198,15 @@ export class JacaEmulator {
       default:
         alert('Opcode ' + currentInstruction.opcode + ' not implemented');
     }
+  }
+
+  getAddressFromHL() {
+    let h = this.registers[2]; // register H
+    let l = this.registers[3]; // register L
+
+    let address = (h*256) + l;
+
+    return address;
   }
 
   executeAluOp(currentInstruction) {
@@ -360,7 +374,11 @@ export class JacaEmulator {
         instructionFormatIndex = 6;
         break;
 
-      //...
+
+      case 4: // LD R1, [HL]
+        opcodeTxt = 'LD';
+        instructionFormatIndex = 7;
+        break;
 
       case 5: // JP [addr]
         opcodeTxt = 'JP';
@@ -510,6 +528,7 @@ export class JacaEmulator {
       '[opcode] [r1]',
       '[opcode] [io_addr], [r1], [r2]',
       '[opcode] [r1], [[address]]',
+      '[opcode] [r1], [HL]'
       // more
     );
 

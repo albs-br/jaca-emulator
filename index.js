@@ -99,6 +99,13 @@ let testProgramsArray = [
         + '0C 00 ff\n'	// LD A, 255
         + '0C 7f ff\n'	// LD A, 32767
         + '0C ff ff\n'	// LD B, 32767
+  },
+  {
+    name: 'Test LD R1, [HL] instr',
+    data:
+          '05 00 00\n'	// LD H, 0
+        + '05 80 04\n'	// LD L, 4
+        + '10 00 00\n'	// LD A, [HL]
   }  
 ];
 
