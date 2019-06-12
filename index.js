@@ -45,7 +45,7 @@ let testProgramsArray = [
         + '24 00 00\n'  // RET
   },
   {
-    name: 'Test OUT/SHL instr',
+    name: 'Test OUT/SHL',
     data: 
           '04 00 01\n'  // LD A, 1
         + '44 02 00\n'  // OUT 1, A
@@ -83,7 +83,7 @@ let testProgramsArray = [
                         // Lacks testing the JP, JP Z and OUT instructions
   },
   {
-    name: 'Test CALL C instr',
+    name: 'Test CALL C',
     data:
           'A0 00 00\n'	// INC A		
         + '34 00 09\n'	// CALL C, 9
@@ -92,7 +92,7 @@ let testProgramsArray = [
         + '80 60 00\n'	// RET
   },
   {
-    name: 'Test LD R1, [addr] instr',
+    name: 'Test LD R1, [addr]',
     data:
           '0C 00 00\n'	// LD A, [0]
         + '0C 80 0A\n'	// LD B, [10]
@@ -101,19 +101,28 @@ let testProgramsArray = [
         + '0C ff ff\n'	// LD B, [32767]
   },
   {
-    name: 'Test LD R1, [HL] instr',
+    name: 'Test LD R1, [HL]',
     data:
           '05 00 00\n'	// LD H, 0
         + '05 80 04\n'	// LD L, 4
         + '10 00 00\n'	// LD A, [HL]
   },
   {
-    name: 'Test ST [addr], R1 instr',
+    name: 'Test ST [addr], R1',
     data:
           '04 00 06\n'  // LD A, 6
         + '28 00 0A\n'	// ST [10], A
         + '0C 80 0A\n'	// LD B, [10]
   },
+  {
+    name: 'Test ST [HL], R1',
+    data:
+          '05 00 00\n'	// LD H, 0
+        + '05 80 04\n'	// LD L, 4
+        + '04 00 06\n'  // LD A, 6
+        + '2C 00 00\n'	// ST [HL], A
+        + '12 00 00\n'	// LD C, [HL]
+  }
 ];
 
 function loadTestProgram(name) {
@@ -130,6 +139,8 @@ let emulator = new J.JacaEmulator();
 
 function reset() {
   emulator.reset();
+
+  loadMemory();
 
   updateScreen();
 }
@@ -196,6 +207,16 @@ function step() {
 
   let startTime = new Date();
 
+  emulator.step();
+
+  updateScreen();
+
+  let endTime = new Date();
+  let timeDiff = endTime - startTime; //in ms
+  //$('#timeElapsed').val(timeDiff);
+}
+
+function loadMemory() {
   let memory = $('#memory').val().trim();
   
   let data = memory
@@ -204,14 +225,6 @@ function step() {
     .split(' ');
 
   emulator.loadMemory(data);
-
-  emulator.step();
-
-  updateScreen();
-
-  let endTime = new Date();
-  let timeDiff = endTime - startTime; //in ms
-  //$('#timeElapsed').val(timeDiff);
 }
 
 // Jquery.ready:
@@ -272,6 +285,8 @@ $(() => {
     let programData = loadTestProgram(element.text());
 
     $('#memory').text(programData);
+
+    loadMemory();
 
     $('#loadMemoryMenu').removeClass('w3-show');
 

@@ -111,6 +111,9 @@ export class JacaEmulator {
         console.info(this.arrMem[currentInstruction.address]);
         console.info(hex2dec(this.arrMem[currentInstruction.address]));
 
+        console.info('mem');
+        for(var i=0; i<=15; i++) { console.info(' ' + i + ':' + this.arrMem[i]) };
+
         this.registers[currentInstruction.r1addr] = hex2dec(this.arrMem[currentInstruction.address]);
         break;
 
@@ -153,13 +156,18 @@ export class JacaEmulator {
 
       case 10: // ST [addr], R1
 
+        // console.info(currentInstruction.address);
         // console.info(this.registers[currentInstruction.r1addr]);
         // console.info(dec2hex(this.registers[currentInstruction.r1addr]));
         
-        console.info('before: ' + this.arrMem[currentInstruction.address]);
+        // console.info('before');
+        // for(var i=0; i<=15; i++) { console.info(' ' + i + ':' + this.arrMem[i]) };
 
         this.arrMem[currentInstruction.address] = dec2hex(this.registers[currentInstruction.r1addr]);
-        console.info('after: ' + this.arrMem[currentInstruction.address]);
+        
+        // console.info('after');
+        // for(var i=0; i<=15; i++) { console.info(' ' + i + ':' + this.arrMem[i]) };
+
         break;
 
       case 11: // ST [HL], R1
@@ -217,7 +225,7 @@ export class JacaEmulator {
 
   getAddressFromHL() {
     let h = this.registers[2];  // register H
-    h = h & 127;                // keep only 7 lower bits
+    //h = h & 0b01111111;   //127;                // keep only 7 lower bits
     let l = this.registers[3];  // register L
 
     let address = (h*256) + l;
@@ -291,7 +299,7 @@ export class JacaEmulator {
 
     if(output < 0) {
       this.C_flag = false;
-      output = output & 255; // keep only 8 lower bits
+      output = output & 0b11111111; // keep only 8 lower bits
     }
     else if(output > 255) {
       this.C_flag = true;
