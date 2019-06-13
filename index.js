@@ -45,13 +45,18 @@ let testProgramsArray = [
         + '24 00 00\n'  // RET
   },
   {
-    name: 'Test OUT/SHL',
+    name: 'Test OUT/SHL/SHR',
     data: 
           '04 00 01\n'  // LD A, 1
         + '44 02 00\n'  // OUT 1, A
         + 'B0 00 00\n'  // SHL A
-        + '18 00 00\n'  // JP Z, 0
+        + '18 00 0F\n'  // JP Z, 15
         + '14 00 03\n'  // JP 3
+        + '04 00 80\n'  // LD A, 0x80
+        + '44 02 00\n'  // OUT 1, A
+        + 'B4 00 00\n'  // SHR A
+        + '18 00 00\n'  // JP Z, 0
+        + '14 00 12\n'  // JP 18
   },
   {
     name: 'Test all instr',
@@ -284,7 +289,7 @@ $(() => {
     let element = $(event.target);
     let programData = loadTestProgram(element.text());
 
-    $('#memory').text(programData);
+    $('#memory').val(programData);
 
     loadMemory();
 
