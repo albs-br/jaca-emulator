@@ -186,7 +186,14 @@ function updateScreen() {
 
   emulator.registers.forEach((element, index, array) => {
     //console.info('register ' + index + ': ' + emulator.registers[index]);
-    $('#registers div:nth-child(' + (index + 2) + ') input').val(emulator.registers[index]);
+
+    let obj = $('#registers div:nth-child(' + (index + 2) + ') input');
+
+    let valueBefore = obj.val();
+    obj.val(emulator.registers[index]);
+    let valueAfter = obj.val();
+    
+    if(valueAfter != valueBefore) obj.change();
   });
 
   // emulator.outputReg = 2; //[debug]
@@ -276,7 +283,6 @@ $(() => {
     $('#memory').val('');
   });
 
-
   $('#loadMemory').click(() => {
     $('#loadMemoryMenu').toggleClass('w3-show');
   });
@@ -297,6 +303,17 @@ $(() => {
 
     event.preventDefault();
   });
+
+  $('.byteField').on('change', function () {
+      let animationOptions = { duration: 500, easing: 'easeOutBounce' }; // looks like it's not working
+      
+      $(this).addClass('w3-pale-red w3-border-red', animationOptions);
+      
+      window.setTimeout(function (obj) {
+        obj.removeClass('w3-pale-red w3-border-red', animationOptions);
+      }, 1000, $(this));
+
+  });  
 
 });
 
