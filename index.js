@@ -246,6 +246,8 @@ $(() => {
   let timer;
   let isRunning = false;
 
+  const INTERVAL = 1; // interval for auto clock in ms
+
   $('#play').click(() => {
 
     if(isRunning) return;
@@ -256,7 +258,7 @@ $(() => {
     $('#play').addClass('w3-red');
 
     isRunning = true;
-    timer = window.setInterval(step, 5);
+    timer = window.setInterval(step, INTERVAL);
     // do {
     //   step();
     // }
@@ -304,14 +306,23 @@ $(() => {
     event.preventDefault();
   });
 
+  let timeouts = [];
   $('.byteField').on('change', function () {
+      // clear all previous timeouts
+      for (var i=0; i<timeouts.length; i++) {
+        window.clearTimeout(timeouts[i]);
+      }
+
+      // remove classes of all elements
+      $('.byteField').removeClass('w3-pale-red w3-border-red');
+
       let animationOptions = { duration: 500, easing: 'easeOutBounce' }; // looks like it's not working
       
       $(this).addClass('w3-pale-red w3-border-red', animationOptions);
-      
-      window.setTimeout(function (obj) {
+
+      timeouts.push(window.setTimeout(function (obj) {
         obj.removeClass('w3-pale-red w3-border-red', animationOptions);
-      }, 1000, $(this));
+      }, 1000, $(this)));
 
   });  
 
